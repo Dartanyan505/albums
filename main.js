@@ -5,17 +5,17 @@ const SPRING_K = 0.003, SPRING_DAMP = 0.1;
 const CENTER_K = 0.0010, GROUP_K  = 0.0022, WALL_K = 0.018;
 const EDGE_FRICTION = 0.92;
 const WATER_STRENGTH = 0.04, WATER_SCALE = 600, WATER_SPEED_X = 0.45, WATER_SPEED_Y = 0.65;
-const DAMPING = 0.986, MAX_SPEED = 2.0;
-const MOUSE_STRENGTH = 0.12, MOUSE_PROPAGATION = 0.15;
+const DAMPING = 0.98, MAX_SPEED = 3.5;
+const MOUSE_STRENGTH = 0.36, MOUSE_PROPAGATION = 0.15;
 
 function computeParams(){
-  SIZE = window.innerWidth / 9;
+  SIZE = window.innerWidth / 6;
   HALF = SIZE/2;
   document.documentElement.style.setProperty('--size', SIZE + 'px');
   SEPARATION_DIST = SIZE * 3.2;
   SPRING_REST     = SIZE * 2.0;
   EDGE_BAND       = 24 * (SIZE/104);
-  MOUSE_RADIUS    = 110 * (SIZE/104);
+  MOUSE_RADIUS    = 330 * (SIZE/104);
   MOUSE_DEADZONE  = 46  * (SIZE/104);
 }
 
@@ -42,7 +42,7 @@ let mouse = {x:null, y:null};
 function artistCentersZigzag(w,h,artists){
   const leftX  = Math.max(SIZE + 120, w * 0.18);
   const rightX = Math.min(w - SIZE - 120, w * 0.82);
-  const startY = SIZE * -3;
+  const startY = SIZE * -5;
   const stepY  = SIZE * 2.8;
   const jitterX = SIZE * 0.07, jitterY = SIZE * 0.07;
   const map = new Map();
@@ -241,6 +241,9 @@ stage.appendChild(el);
                      n.el.addEventListener('mouseleave', ()=>{n.hovered=false;n.el.classList.remove('on-top');}); });
   nodes.forEach(n=>{ n.el.style.left=n.x+'px'; n.el.style.top=n.y+'px'; });
   renderLabels(); step();
+
+  document.getElementById('loader').style.display = 'none';
+
 }
 
 init();

@@ -63,3 +63,24 @@ body{
   padding:10px 14px; border-bottom:1px solid rgba(255,255,255,0.1);}
 #panelClose{ background:none; border:none; font-size:22px; color:#fff; cursor:pointer;}
 #panelContent{ padding:14px; overflow:auto; flex:1; }
+
+#loader {
+    position: fixed;
+    inset: 0;
+    background: rgba(15,23,42,0.92); /* koyu bg */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 5000;
+  }
+  .spinner {
+    width: 60px;
+    height: 60px;
+    border: 6px solid rgba(255,255,255,0.2);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
