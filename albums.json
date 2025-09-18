@@ -1,0 +1,102 @@
+[
+  {
+    "artist": "Radiohead",
+    "title": "OK Computer",
+    "desc": "1997 çıkışlı, modern rock’ın en önemli albümlerinden biri."
+  },
+  {
+    "artist": "Radiohead",
+    "title": "Kid A",
+    "desc": "Elektronik ve deneysel öğelerle dolu radikal bir yön değişimi."
+  },
+  {
+    "artist": "Radiohead",
+    "title": "In Rainbows",
+    "desc": "2007’de dijital dağıtımıyla müzik endüstrisinde çığır açtı."
+  },
+
+  {
+    "artist": "Daft Punk",
+    "title": "Discovery",
+    "desc": "House ve disco unsurlarını harmanlayan kült albüm."
+  },
+  {
+    "artist": "Daft Punk",
+    "title": "Homework",
+    "desc": "Fransız elektronik müziğinin çıkış noktalarından."
+  },
+  {
+    "artist": "Daft Punk",
+    "title": "Random Access Memories",
+    "desc": "2013’te çıkıp Grammy ödüllerini süpüren retro-funk şaheseri."
+  },
+
+  {
+    "artist": "Pink Floyd",
+    "title": "The Dark Side of the Moon",
+    "desc": "Rock tarihinin en ikonik albümlerinden, 1973."
+  },
+  {
+    "artist": "Pink Floyd",
+    "title": "Wish You Were Here",
+    "desc": "Syd Barrett’e ithaf edilen duygusal albüm."
+  },
+  {
+    "artist": "Pink Floyd",
+    "title": "Animals",
+    "desc": "Kapitalizm eleştirisiyle dolu karanlık bir konsept albüm."
+  },
+  {
+    "artist": "Pink Floyd",
+    "title": "The Wall",
+    "desc": "1979 tarihli dev konsept albüm ve rock operası."
+  },
+
+  {
+    "artist": "Arctic Monkeys",
+    "title": "AM",
+    "desc": "2013 çıkışlı, modern indie rock’ın mihenk taşı."
+  },
+  {
+    "artist": "Arctic Monkeys",
+    "title": "Favourite Worst Nightmare",
+    "desc": "Hızlı ritimleri ve enerjik parçalarıyla bilinir."
+  },
+
+  {
+    "artist": "Coldplay",
+    "title": "Parachutes",
+    "desc": "Grubun çıkış albümü, duygusal balladlarıyla öne çıkar."
+  },
+  {
+    "artist": "Coldplay",
+    "title": "A Rush of Blood to the Head",
+    "desc": "Grammy ödüllü, piyanonun ön planda olduğu klasik bir albüm."
+  },
+  {
+    "artist": "Coldplay",
+    "title": "Viva la Vida or Death and All His Friends",
+    "desc": "2008’de çıkış yapan, orkestra düzenlemeleriyle dikkat çeken albüm."
+  },
+
+  {
+    "artist": "Kendrick Lamar",
+    "title": "good kid, m.A.A.d city",
+    "desc": "Los Angeles sokaklarını anlatan otobiyografik bir şaheser."
+  },
+  {
+    "artist": "Kendrick Lamar",
+    "title": "To Pimp a Butterfly",
+    "desc": "Jazz, funk ve hip-hop’u birleştiren politik açıdan güçlü bir albüm."
+  },
+  {
+    "artist": "Kendrick Lamar",
+    "title": "DAMN.",
+    "desc": "2017’de çıkan, Pulitzer ödüllü albüm."
+  },
+  {
+    "artist": "Kendrick Lamar",
+    "title": "Mr. Morale & The Big Steppers",
+    "desc": "2022’de çıkan, kişisel temalarıyla öne çıkan albüm."
+  }
+]
