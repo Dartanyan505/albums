@@ -1,49 +1,47 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Albüm Önerilerim</title>
-  <link rel="icon" type="image/png" href="logo.png" />
-
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@700&display=swap" rel="stylesheet">
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Albüm Koleksiyonum</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Hero Header -->
+
+  <!-- Hero -->
   <header id="siteHeader" class="hero">
     <div class="hero-inner">
       <h1>Dinlediklerimden Öneriler</h1>
       <p>Sizler için seçtiğim leziz albümler.</p>
     </div>
+
+    <!-- Aşağı ok -->
     <div class="scroll-down">
-      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" 
+           viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+              d="M19 9l-7 7-7-7"/>
       </svg>
     </div>
+
+    <!-- Renkli çizgi -->
+    <div class="hero-line"></div>
   </header>
 
-  <!-- Albüm sahnesi -->
-  <div id="stage"></div>
+  <!-- Albüm grid sahnesi -->
+  <main id="stage">
+    <!-- Albümler JS ile buraya gelecek -->
+  </main>
 
-  <!-- Albüm Detay Paneli -->
-  <aside id="panel" role="complementary" aria-labelledby="panelTitle" class="panel">
+  <!-- Panel -->
+  <aside id="panel" class="panel">
     <header>
-      <h3 id="panelTitle">Albüm Detayı</h3>
-      <button id="panelClose" aria-label="Kapat">×</button>
+      <h3 id="panelTitle"></h3>
+      <button id="panelClose">&times;</button>
     </header>
-    <div id="panelContent" aria-live="polite">Bir albüme tıklayın.</div>
+    <div id="panelContent"></div>
   </aside>
 
   <script src="main.js"></script>
-
-  <!-- Blob Arkaplan -->
-  <div id="blobs">
-    <div class="blob"></div>
-    <div class="blob"></div>
-    <div class="blob"></div>
-  </div>
 </body>
 </html>
