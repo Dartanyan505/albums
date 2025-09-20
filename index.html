@@ -6,34 +6,52 @@
   <title>Albüm Önerilerim</title>
   <link rel="icon" type="image/png" href="logo.png" />
 
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@700&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Loading ekranı -->
-  <div id="loader"><div class="spinner"></div></div>
-
-  
-  <header id="siteHeader" style="text-align:center; padding:24px 12px;">
-    <h1 style="margin:12px 0 0; font-size:clamp(20px,4vw,44px); font-weight:800; letter-spacing:.02em; color:#fff;">
-      Dinlediklerimden Öneriler
-    </h1>
-    <p style="margin:6px 0 0; font-size:14px; opacity:.75;">Sizler için seçtiğim leziz albümler.</p>
-  </header>
+  <!-- Hero Header -->
+  <header id="siteHeader" class="hero">
+    <div class="hero-inner">
+      <h1>Dinlediklerimden Öneriler</h1>
+      <p>Sizler için seçtiğim leziz albümler.</p>
+    </div>
+    <div class="scroll-down">
+  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+  </svg>
 </div>
+  </header>
 
+  <!-- Loader -->
+  <div id="loader">
+    <div id="progress-container">
+      <div id="progress-bar"></div>
+    </div>
+    <div id="loader-stage"></div>
+  </div>
 
+  <!-- Albüm sahnesi -->
   <div id="stage"></div>
 
   <!-- Albüm Detay Paneli -->
-  <aside id="panel" class="panel">
+  <aside id="panel" role="complementary" aria-labelledby="panelTitle" class="panel">
     <header>
       <h3 id="panelTitle">Albüm Detayı</h3>
-      <button id="panelClose">×</button>
+      <button id="panelClose" aria-label="Kapat">×</button>
     </header>
-    <div id="panelContent">Bir albüme tıklayın.</div>
+    <div id="panelContent" aria-live="polite">Bir albüme tıklayın.</div>
   </aside>
 
   <script src="main.js"></script>
-</body>
 
+  <!-- Blob Arkaplan -->
+  <div id="blobs">
+    <div class="blob"></div>
+    <div class="blob"></div>
+    <div class="blob"></div>
+  </div>
+</body>
 </html>

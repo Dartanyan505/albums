@@ -6,6 +6,7 @@ const CENTER_K = 0.0010, GROUP_K  = 0.0022, WALL_K = 0.018;
 const EDGE_FRICTION = 0.92;
 const WATER_STRENGTH = 0.04, WATER_SCALE = 600, WATER_SPEED_X = 0.45, WATER_SPEED_Y = 0.65;
 const DAMPING = 0.98, MAX_SPEED = 3.5;
+const albumCache = new Map();
 const MOUSE_STRENGTH = 0.36, MOUSE_PROPAGATION = 0.15;
 
 function computeParams(){
@@ -38,7 +39,7 @@ let nodes=[], artists=[], centers=new Map(), byArtist=new Map(), links=[];
 const labels = new Map(), smoothLabelPos=new Map();
 let mouse = {x:null, y:null};
 
-// === Zigzag ===
+// === Zigzag yerleşim ===
 function artistCentersZigzag(w,h,artists){
   const leftX  = Math.max(SIZE + 120, w * 0.18);
   const rightX = Math.min(w - SIZE - 120, w * 0.82);
@@ -55,7 +56,7 @@ function artistCentersZigzag(w,h,artists){
   return map;
 }
 
-// Etiket
+// === Etiketler ===
 function renderLabels(){
   labels.forEach(el=> el.remove()); labels.clear();
   artists.forEach(name=>{
@@ -82,7 +83,7 @@ function updateLabelsToCentroids(){
   });
 }
 
-// === Fizik Step ===
+// === Fizik motoru ===
 function step(){
   const w=W(), h=H(), t = performance.now()/1000;
   nodes.forEach(n=>{ n.ax=0; n.ay=0; });
@@ -169,81 +170,180 @@ function step(){
   requestAnimationFrame(step);
 }
 
-// Mouse
+// === Mouse ===
 stage.addEventListener('mousemove', e=>{
   const rect=stage.getBoundingClientRect();
   mouse.x=e.clientX-rect.left+window.scrollX; mouse.y=e.clientY-rect.top+window.scrollY;
 });
 stage.addEventListener('mouseleave', ()=>{ mouse.x=null; mouse.y=null; });
 
-// Panel
+// === Panel ===
 const panel=document.getElementById('panel'), panelTitle=document.getElementById('panelTitle'), panelContent=document.getElementById('panelContent');
-document.getElementById('panelClose').addEventListener('click', ()=> panel.classList.remove('open'));
+document.getElementById('panelClose').addEventListener('click', ()=> { panel.classList.remove('open'); document.body.classList.remove('no-scroll'); });
 function openPanel(album, customDesc){
-  // Çıkış tarihi formatla
-  let release = "";
-  if(album.wiki?.published){
-    const d = new Date(album.wiki.published);
-    if(!isNaN(d)) release = d.toLocaleDateString("tr-TR", { month:"long", year:"numeric" });
-  }
-
   panelTitle.textContent = `${album.artist} — ${album.name}`;
+  const imgUrl = (Array.isArray(album.image) ? (album.image[album.image.length-1] && album.image[album.image.length-1]['#text']) : '') || '';
   panelContent.innerHTML = `
-    <img src="${album.image?.pop()?.['#text'] || ''}" style="width:100%; border-radius:8px; margin-bottom:12px;">
-
+    <img src="${imgUrl}" style="width:100%; border-radius:8px; margin-bottom:12px;">
     <h4>Açıklama</h4>
     <p>${customDesc || "Henüz açıklama eklenmedi."}</p>
-
-    
-
     <h4>Parçalar</h4>
     <ol>${(album.tracks?.track||[]).map(t=>`<li>${t.name}</li>`).join('')}</ol>
   `;
   panel.classList.add('open');
+  document.body.classList.add('no-scroll');
 }
 
-
-// Fetch album info
+// === API çağrısı ===
 async function fetchAlbumInfo(artist, album){
-  const url=`https://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=${API_KEY}&artist=${encodeURIComponent(artist)}&album=${encodeURIComponent(album)}&format=json`;
-  const res=await fetch(url); if(!res.ok) return null; const data=await res.json();
-  return data.album||null;
+  const key = `${artist}|${album}`;
+  if(albumCache.has(key)) return albumCache.get(key);
+  const url = `https://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=${API_KEY}&artist=${encodeURIComponent(artist)}&album=${encodeURIComponent(album)}&format=json`;
+  const res = await fetch(url);
+  if(!res.ok) return null;
+  const data = await res.json();
+  const out = data.album || null;
+  if(out) albumCache.set(key, out);
+  return out;
 }
 
+// === Scroll-down oku hazırla ===// === Scroll-down oku hazırla ===
+function wireScrollDown(){
+  const scrollDown = document.querySelector('.scroll-down');
+  if(!scrollDown) return;
+
+  // tıklayınca sahneye kay
+  scrollDown.addEventListener('click', () => {
+    stage.scrollIntoView({ behavior: 'smooth' });
+  });
+
+  // fadeInUp bitince bounce başlasın
+  const startBounce = () => scrollDown.classList.add('show-bounce');
+
+  scrollDown.addEventListener('animationend', (e) => {
+    if(e.animationName === 'fadeInUp'){ startBounce(); }
+  });
+
+  // fallback: olayı kaçırırsa ~2.6s sonra bounce başlasın
+  setTimeout(()=>{
+    if(getComputedStyle(scrollDown).opacity === '1' && !scrollDown.classList.contains('show-bounce')){
+      startBounce();
+    }
+  }, 2600);
+}
+
+// === Init ===
 async function init(){
   computeParams();
-  const res=await fetch('albums.json'); const albumsData=await res.json();
+  wireScrollDown();
+
+  const res = await fetch('albums.json'); 
+  const albumsData = await res.json();
+
+  const total = albumsData.length;
+  let loaded = 0;
+  const progressBar = document.getElementById('progress-bar');
+  const loaderStage = document.getElementById('loader-stage');
+
   for(const d of albumsData){
     const info = await fetchAlbumInfo(d.artist, d.title);
-const imgUrl = info?.image?.pop()?.['#text'] || "https://via.placeholder.com/400";
-const el = document.createElement('div');
-el.className = 'album';
-el.dataset.artist = d.artist;
-el.dataset.title = d.title;
-el.innerHTML = `
-  <img src="${imgUrl}" alt="${d.title}">
-  <div class="overlay"><strong>${d.title}</strong><div class="tag">${d.artist}</div></div>
-`;
-el.addEventListener('click', ()=> info && openPanel(info, d.desc));
-stage.appendChild(el);
 
+    let imgUrl = d.cover || "https://via.placeholder.com/400x400?text=" + encodeURIComponent(d.title);
+    if(!d.cover && info?.image){
+      const candidates = info.image.filter(i => i['#text']);
+      if(candidates.length > 0){
+        imgUrl = candidates[candidates.length-1]['#text'];
+      }
+    }
+
+    const el = document.createElement('div');
+    el.className = 'album';
+    el.dataset.artist = d.artist;
+    el.dataset.title = d.title;
+    el.dataset.desc = d.desc || "";
+    el.setAttribute('role','button');
+    el.setAttribute('tabindex','0');
+    el.setAttribute('aria-label', `${d.artist} — ${d.title} albümünü aç`);
+    el.innerHTML = `
+      <img src="${imgUrl}" alt="${d.title}">
+      <div class="overlay"><strong>${d.title}</strong><div class="tag">${d.artist}</div></div>
+    `;
+    loaderStage.appendChild(el);
+
+    const img = el.querySelector("img");
+    img.onload = img.onerror = () => {
+      loaded++;
+      progressBar.style.width = ((loaded/total)*100) + "%";
+      el.classList.add("show");
+
+      if(loaded === total){
+        setTimeout(()=>{
+          const loaderAlbums = Array.from(loaderStage.children);
+          const stageRect = stage.getBoundingClientRect();
+
+          loaderAlbums.forEach(a => {
+            const rect = a.getBoundingClientRect();
+            const x = rect.left - stageRect.left;
+            const y = rect.top - stageRect.top;
+            stage.appendChild(a);
+            a.style.position = "absolute";
+            a.style.left = x + "px";
+            a.style.top  = y + "px";
+            a.classList.add("to-stage");
+          });
+
+          document.getElementById('loader').style.display = 'none';
+          startPhysics();
+        }, 500);
+      }
+    };
   }
-  const elAlbums=Array.from(stage.querySelectorAll('.album'));
-  nodes=elAlbums.map(el=>({el,artist:el.dataset.artist,title:el.dataset.title,
-    x:Math.random()*(window.innerWidth-SIZE-60)+30,y:Math.random()*(window.innerHeight-SIZE-60)+30,
-    vx:(Math.random()-0.5)*0.6,vy:(Math.random()-0.5)*0.6,hovered:false,ax:0,ay:0}));
-  artists=Array.from(new Set(nodes.map(n=>n.artist)));
-  stage.style.height=computeStageHeight(artists.length)+'px'; centers=artistCentersZigzag(W(),H(),artists);
-  byArtist=new Map(); nodes.forEach(n=>{ if(!byArtist.has(n.artist)) byArtist.set(n.artist,[]); byArtist.get(n.artist).push(n); });
+}
+
+function startPhysics(){
+  const elAlbums = Array.from(stage.querySelectorAll('.album'));
+
+  nodes = elAlbums.map(el => {
+    const x = parseFloat(el.style.left);
+    const y = parseFloat(el.style.top);
+
+    return {
+      el,
+      artist: el.dataset.artist,
+      title: el.dataset.title,
+      desc: el.dataset.desc,
+      x, y,
+      vx:(Math.random()-0.5)*0.6,
+      vy:(Math.random()-0.5)*0.6,
+      hovered:false,
+      ax:0, ay:0
+    };
+  });
+
+  artists = Array.from(new Set(nodes.map(n => n.artist)));
+  stage.style.height = computeStageHeight(artists.length) + 'px';
+  centers = artistCentersZigzag(W(), H(), artists);
+
+  byArtist = new Map();
+  nodes.forEach(n=>{
+    if(!byArtist.has(n.artist)) byArtist.set(n.artist,[]);
+    byArtist.get(n.artist).push(n);
+  });
   byArtist.forEach(arr=>arr.sort((a,b)=>(a.title||'').localeCompare(b.title||'')));
-  links=[]; byArtist.forEach(arr=>{ for(let i=0;i<arr.length-1;i++) links.push({a:arr[i],b:arr[i+1]}); });
-  nodes.forEach(n=>{ n.el.addEventListener('mouseenter', ()=>{n.hovered=true;n.el.classList.add('on-top');});
-                     n.el.addEventListener('mouseleave', ()=>{n.hovered=false;n.el.classList.remove('on-top');}); });
-  nodes.forEach(n=>{ n.el.style.left=n.x+'px'; n.el.style.top=n.y+'px'; });
-  renderLabels(); step();
 
-  document.getElementById('loader').style.display = 'none';
+  links = [];
+  byArtist.forEach(arr=>{
+    for(let i=0;i<arr.length-1;i++) links.push({a:arr[i], b:arr[i+1]});
+  });
 
+  nodes.forEach(n=>{
+    n.el.addEventListener('mouseenter', ()=>{n.hovered=true; n.el.classList.add('on-top');});
+    n.el.addEventListener('mouseleave', ()=>{n.hovered=false; n.el.classList.remove('on-top');});
+    n.el.addEventListener('click', ()=> fetchAlbumInfo(n.artist, n.title).then(info => info && openPanel(info, n.desc)));
+  });
+
+  renderLabels();
+  step();
 }
 
 init();
