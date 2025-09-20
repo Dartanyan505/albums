@@ -1,20 +1,67 @@
 [
   {
     "artist": "Radiohead",
+    "title": "Pablo Honey",
+    "spotify": "https://open.spotify.com/album/3gBVdu4a1MMJVMy6vwPEb8",
+    "ytmusic": "https://music.youtube.com/playlist?list=OLAK5uy_lCl8VFn-xBO9PlDF2E0FXSjhaU0dLJP9I",
+    "apple": "https://music.apple.com/us/album/pablo-honey/1097862062"
+  },
+  {
+    "artist": "Radiohead",
+    "title": "The Bends",
+    "spotify": "https://open.spotify.com/album/35UJLpClj5EDrhpNIi4DFg",
+    "ytmusic": "https://music.youtube.com/playlist?list=OLAK5uy_mjfZt29ZKuw9FnglSH4_LLqWBPIPicLjI",
+    "apple": "https://music.apple.com/us/album/the-bends/1097862703"
+  },
+  {
+    "artist": "Radiohead",
     "title": "OK Computer",
-    "desc": "1997 çıkışlı, modern rock’ın en önemli albümlerinden biri."
+    "spotify": "https://open.spotify.com/album/6dVIqQ8qmQ5GBnJ9shOYGE",
+    "ytmusic": "https://music.youtube.com/browse/MPREb_yXhSI4FCUo6",
+    "apple": "https://music.apple.com/us/album/ok-computer/1097861387"
   },
   {
     "artist": "Radiohead",
     "title": "Kid A",
-    "desc": "Elektronik ve deneysel öğelerle dolu radikal bir yön değişimi."
+    "spotify": "https://open.spotify.com/album/6GjwtEZcfenmOf6l18N7T7",
+    "ytmusic": "https://music.youtube.com/playlist?list=OLAK5uy_lDotrFl8LXo4UMq_XeVB1areFI_b8Par8",
+    "apple": "https://music.apple.com/us/album/kid-a/1097862870"
+  },
+  {
+    "artist": "Radiohead",
+    "title": "Amnesiac",
+    "spotify": "https://open.spotify.com/album/1HrMmB5useeZ0F5lHrMvl0",
+    "ytmusic": "https://music.youtube.com/browse/MPREb_DyYPOfs7HPD",
+    "apple": "https://music.apple.com/us/album/amnesiac/1097864180"
+  },
+  {
+    "artist": "Radiohead",
+    "title": "Hail to the Thief",
+    "spotify": "https://open.spotify.com/album/5mzoI3VH0ZWk1pLFR6RoYy",
+    "ytmusic": "https://music.youtube.com/playlist?list=OLAK5uy_mRDhp5c2KZe2Penu4PLevXa7z5cBk4DXY",
+    "apple": "https://music.apple.com/us/album/hail-to-the-thief/1097863576"
   },
   {
     "artist": "Radiohead",
     "title": "In Rainbows",
-    "desc": "2007’de dijital dağıtımıyla müzik endüstrisinde çığır açtı."
+    "spotify": "https://open.spotify.com/album/5vkqYmiPBYLaalcmjujWxK",
+    "ytmusic": "https://music.youtube.com/playlist?list=OLAK5uy_m59x-hBFsC789l1_qWwFXwH3gjntwy_CA",
+    "apple": "https://music.apple.com/us/album/in-rainbows/1109714933"
   },
-
+  {
+    "artist": "Radiohead",
+    "title": "The King of Limbs",
+    "spotify": "https://open.spotify.com/album/3P17levwUPzmFfLYdAK3A7",
+    "ytmusic": "https://music.youtube.com/playlist?list=OLAK5uy_kkxS8q1obnji_VjkWtpgWgpZAzAePSSA0",
+    "apple": "https://music.apple.com/us/album/the-king-of-limbs/1109714965"
+  },
+  {
+    "artist": "Radiohead",
+    "title": "A Moon Shaped Pool",
+    "spotify": "https://open.spotify.com/album/2ix8vWvvSp2Yo7rKMiWpkg",
+    "ytmusic": "https://music.youtube.com/playlist?list=OLAK5uy_l2JdqQ9q-aHSQmRiz3NfIkU2kkbxd1-ps",
+    "apple": "https://music.apple.com/us/album/a-moon-shaped-pool/1111577743"
+  },
   {
     "artist": "Daft Punk",
     "title": "Discovery",
