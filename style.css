@@ -335,6 +335,41 @@ body {
   background: #fff;
 }
 
+/* Overlay içi tipografi */
+.overlay .title {
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1.2;
+  letter-spacing: .1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.overlay .artist {
+  margin-top: 2px;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 1.15;
+  letter-spacing: .2px;
+  color: rgba(255,255,255,0.65);        /* soluk görünüm */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.35); /* okunurluk için hafif gölge */
+}
+
+/* İsteğe bağlı: Hover’da artist biraz daha belirginleşsin */
+.album:hover .overlay .artist,
+.album.active .overlay .artist {
+  color: rgba(255,255,255,0.78);
+}
+
+@media (max-width: 767px) {
+  .overlay .title { font-size: 13px; }
+  .overlay .artist { font-size: 11px; }
+}
+
 /* İkinci grid seti (kullanıyorsan) */
 .album-grid {
   display: grid;

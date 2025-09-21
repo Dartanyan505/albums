@@ -402,16 +402,18 @@ async function init(){
     el.style.animationDelay = (i*0.05) + "s";
 
     el.innerHTML = `
-      <img src="${imgUrl}" alt="${d.title}" loading="lazy">
-      <div class="overlay"><strong>${d.title}</strong></div>
-    `;
+  <img src="${imgUrl}" alt="${d.title}" loading="lazy">
+  <div class="overlay">
+    <div class="title">${d.title}</div>
+    ${d.artist ? `<div class="artist">${d.artist}</div>` : ""}
+  </div>
+`;
+
     frag.appendChild(el);
   });
   stage.appendChild(frag);
 
   setupAlbums();
 }
-
-
 
 init().then(()=> openFromHash());
