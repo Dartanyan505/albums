@@ -86,7 +86,7 @@ body {
   transition: transform 0.5s ease, opacity 0.5s ease;
   opacity: 0;
   overflow: hidden;
- z-index: 3; width: min(86%, 620px); }
+  z-index: 3; width: min(86%, 620px); }
 
 .hero-inner {
   max-width: 800px;
@@ -130,8 +130,7 @@ body {
   opacity: 1;
   cursor: pointer;
   transition: opacity 0.5s ease, transform 0.5s ease;
- z-index: 3; }
-
+  z-index: 3; }
 
 .scroll-down svg {
   width: 40px;
@@ -172,7 +171,7 @@ body {
   transition: transform 0.5s ease, opacity 0.5s ease;
   opacity: 0;
   overflow: hidden;
- z-index: 3; width: min(86%, 620px); }
+  z-index: 3; width: min(86%, 620px); }
 
 .hero-line::after {
   content: "";
@@ -228,6 +227,16 @@ body {
 @media (max-width: 480px) {
   #stage {
     grid-template-columns: repeat(2, 1fr); /* 🔑 2 sütuna sabitle */
+    padding: 16px;   /* küçük ekranda taşmayı önlemek için */
+    gap: 12px;
+  }
+}
+
+/* 481–599 px arası da 2 sütun kalsın */
+@media (min-width: 481px) and (max-width: 599px) {
+  #stage,
+  .album-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
@@ -255,6 +264,15 @@ body {
   height: 100%;
   object-fit: cover;
   transition: transform 0.4s ease;
+}
+
+/* Mobilde kartları %80 ölçekle (grid hücresine göre) */
+@media (max-width: 767px) {
+  .album {
+    width: 80% !important;
+    height: auto !important;
+    aspect-ratio: 1 / 1;
+  }
 }
 
 /* Hover veya mobil aktif */
@@ -317,29 +335,78 @@ body {
   background: #fff;
 }
 
+/* İkinci grid seti (kullanıyorsan) */
+.album-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 16px;
+  padding: 16px;
+}
+
+/* Küçük ekranlar için */
+@media (max-width: 480px) {
+  .album-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 sütun */
+  }
+}
+
+/* Orta ekranlar (tablet boyutları) */
+@media (min-width: 481px) and (max-width: 767px) {
+  .album-grid {
+    grid-template-columns: repeat(3, 1fr); /* 3 sütun */
+  }
+}
+
+/* Daha büyük ekranlar */
+@media (min-width: 768px) {
+  .album-grid {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  }
+}
+
 
 /* ==== Panel ==== */
+/* Ortak panel stili */
 .panel {
   position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 80vh; /* yüksekliği ayarlayabilirsin */
-  width: 100%;
-  background: #111; /* panel için koyu siyah */
-  transform: translateY(100%); 
-  transition: transform .3s ease;
+  background: #111;
   z-index: 5000;
   display: flex;
   flex-direction: column;
   color: #fff;
-  border-top-left-radius: 16px;
-  border-top-right-radius: 16px;
-  box-shadow: 0 -4px 12px rgba(0,0,0,0.3);
+  transition: transform .3s ease;
 }
 
-.panel.open {
-  transform: translateY(0);
+/* --- PC görünümü (sağdan) --- */
+@media (min-width: 768px) {
+  .panel {
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: min(92vw, 420px);
+    transform: translateX(100%); /* sağdan dışarıda başla */
+  }
+  .panel.open {
+    transform: translateX(0); /* PC'de X ekseni animasyonu */
+  }
+}
+
+/* --- Mobil görünümü (aşağıdan) --- */
+@media (max-width: 767px) {
+  .panel {
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: min(80vh, 700px); /* uzun ekranlarda güvenli */
+    width: 100%;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    box-shadow: 0 -4px 12px rgba(0,0,0,0.3);
+    transform: translateY(100%); /* alttan dışarıda başla */
+  }
+  .panel.open {
+    transform: translateY(0); /* sadece mobilde Y ekseni */
+  }
 }
 
 .panel header {
@@ -376,20 +443,27 @@ body {
 
 #panelOverlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0,0,0,0.4); /* hafif siyah transparan */
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.4);
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s ease;
-  z-index: 4999; /* panelin arkasında */
+  z-index: 4999;
 }
 
-#panelOverlay.open {
-  opacity: 1;
-  visibility: visible;
+/* sadece mobilde görünür */
+@media (max-width: 767px) {
+  #panelOverlay.open {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+/* PC'de overlay her zaman gizli */
+@media (min-width: 768px) {
+  #panelOverlay {
+    display: none !important;
+  }
 }
 
 /* ==== Play Buttons ==== */
@@ -424,12 +498,17 @@ body {
   .album { width: 160px; height: 160px; }
 }
 
-
-
-
+/* Küçük ekran için kartları akışa bırak (önceki sabit 160px'i ezer) */
+@media (max-width: 480px) {
+  .album {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    max-width: none;
+  }
+}
 
 .album.pulse{ outline: 2px solid rgba(255,255,255,.4); outline-offset: 2px; transition: outline-color .6s; }
-
 
 /* --- Scroll-down arrow bob animation --- */
 .scroll-down svg {
@@ -448,8 +527,7 @@ body {
   left: 50%;
   transform: translateX(-50%);
   transition: opacity 0.5s ease;
- z-index: 3; }
-
+  z-index: 3; }
 
 .scroll-down .scroll-down-inner{
   display: inline-block;
@@ -468,8 +546,6 @@ body {
 }
 
 .meta-line { margin:4px 0 8px; font-size:0.9rem; opacity:0.7; }
-
-
 
 /* Panel header layout: left column (title + year), close on right */
 .panel header .head-left { display:flex; flex-direction:column; gap:2px; min-width:0; }
