@@ -439,8 +439,8 @@ async function init(){
   const CURSOR_EASE = 0.25;
 
   // Çok ince hizalama düzeltmesi için (gerekirse -1, +1 gibi küçük değerler verin)
-  const OFFSET_X = -10;
-  const OFFSET_Y = -9;
+  const OFFSET_X = 0;
+  const OFFSET_Y = 0;
 
   // Hedef: tıklanabilir seçimler (gerekirse genişletin)
   const HOVER_SELECTOR = 'a, button, .album, [role="button"], .play-button';
