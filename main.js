@@ -141,7 +141,12 @@ function closePanel(){
   document.getElementById("panelOverlay")?.classList.remove("open"); // overlay'i kapat
   document.body.style.overflow = "";
   if(location.hash) history.replaceState(null,"",location.pathname+location.search+"#/");
-  try{ __lastFocused?.focus?.(); }catch{}
+  try{
+  if (window.innerWidth < 768) {
+    __lastFocused?.focus?.({ preventScroll: true });
+    }
+  }catch{}
+
 }
 
 function openPanel(album, opts={}){
