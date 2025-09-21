@@ -62,6 +62,7 @@ body {
 #siteHeader.hero {
   position: relative;
   height: 100vh;
+  height: 100svh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -73,7 +74,7 @@ body {
 
 .hero-line {
   position: absolute;
-  bottom: 40px;
+  bottom: calc(24px + env(safe-area-inset-bottom, 0px));
   left: 50%;
   transform: translateX(-50%) scaleX(0);
   transform-origin: center;
@@ -124,7 +125,7 @@ body {
 /* ==== Scroll Down Ok ==== */
 .scroll-down {
   position: absolute;
-  bottom: 40px;
+  bottom: calc(24px + env(safe-area-inset-bottom, 0px));
   left: 50%;
   transform: translateX(-50%) scale(1);
   opacity: 1;
@@ -597,3 +598,131 @@ body {
 
 /* Panel sürükleme (drag) sırasında animasyonu kapat */
 .panel.dragging { transition: none !important; }
+
+/* Yalnızca hassas işaretleyicili cihazlarda (mouse) göster */
+@media (pointer: fine) {
+  /* Sistem imlecini gizle (metin alanlarında geri getireceğiz) */
+  body.cursor-hide { cursor: none; }
+
+  /* Metin alanlarında sistem imleci kalsın */
+  input, textarea, select, [contenteditable="true"] { cursor: text; }
+
+  /* Özel imleç çekirdeği */
+  #cursor {
+    position: fixed;
+    top: 0; left: 0;
+    width: 18px; height: 18px;
+    border: 2px solid rgba(255,255,255,.9);
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate3d(-50%, -50%, 0);
+    transition: width .18s ease, height .18s ease, border-color .18s ease, background-color .18s ease, opacity .18s ease;
+    opacity: 0; /* sayfa içine girince görünür olacak */
+    z-index: 9999;
+    will-change: transform;
+    mix-blend-mode: difference; /* koyu/açık zeminde görünürlüğü artırır */
+    /* Karışım modunu istemezseniz kaldırın */
+  }
+
+  /* Hover’da büyüme (tıklanabilir öğeler) */
+  #cursor.is-hover {
+    width: 36px; height: 36px;
+    background-color: rgba(255,255,255,.08);
+    border-color: rgba(255,255,255,1);
+  }
+
+  /* Basılıyken ufak daralma */
+  #cursor.is-down {
+    width: 14px; height: 14px;
+    background-color: rgba(255,255,255,.2);
+  }
+
+  /* Görünür/ gizli durumları */
+  #cursor.is-visible { opacity: 1; }
+  #cursor.is-hidden  { opacity: 0; }
+}
+
+/* === Custom cursor için kesin gizleme — en SONA koyun === */
+@media (pointer: fine) {
+  /* Varsayılan gizleme */
+  html, body { cursor: none !important; }
+
+  /* Body'de cursor-hide sınıfı varken her yerde gizle,
+     SADECE metin alanlarında text imleci göster */
+  body.cursor-hide *:not(input):not(textarea):not(select):not([contenteditable="true"]) {
+    cursor: none !important;
+  }
+  input, textarea, select, [contenteditable="true"] {
+    cursor: text !important;
+  }
+
+  /* Tıklanabilirlerin UA/tema pointer'ını devre dışı bırak */
+  a, button, .play-button, .album, .album-overlay button, #panel, #panel * {
+    cursor: inherit !important;   /* parent’tan devral: none */
+  }
+
+  /* SVG içinde tanımlı cursor stillerini de bastır */
+  svg, svg * { cursor: inherit !important; }
+}
+
+/* === Crosshair cursor (yalnız desktop) === */
+@media (pointer: fine) {
+  /* Varsayılan custom cursor ayarlarınız korunur; sadece .is-aim halinde hedef görünümü veriyoruz */
+  #cursor.is-aim {
+    width: 22px; height: 22px;
+    border: none;                       /* halka sınırını gizle */
+    background:
+      linear-gradient(currentColor, currentColor) center / 2px 100% no-repeat,  /* dikey çizgi */
+      linear-gradient(currentColor, currentColor) center / 100% 2px no-repeat;  /* yatay çizgi */
+    color: #fff;
+    opacity: 1;
+  }
+
+  /* İsteğe bağlı: hedef modunda hafif merkez noktası */
+  #cursor.is-aim::after {
+    content: "";
+    position: absolute;
+    inset: 50%;
+    width: 4px; height: 4px;
+    transform: translate(-50%, -50%);
+    background: currentColor;
+    border-radius: 50%;
+  }
+}
+
+/* === Albüm köşe hedef çizgileri === */
+.album {
+  --aim-corner: 16px;  /* köşe uzunluğu */
+  --aim-thick: 2px;    /* çizgi kalınlığı */
+  --aim-color: rgba(255,255,255,.9);
+  position: relative;
+}
+
+.album.is-aim::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  /* 8 adet min-şerit ile 4 köşeyi çiziyoruz */
+  background:
+    /* Sol üst */
+    linear-gradient(var(--aim-color), var(--aim-color)) top   left  / var(--aim-corner) var(--aim-thick) no-repeat,
+    linear-gradient(var(--aim-color), var(--aim-color)) top   left  / var(--aim-thick) var(--aim-corner) no-repeat,
+    /* Sağ üst */
+    linear-gradient(var(--aim-color), var(--aim-color)) top   right / var(--aim-corner) var(--aim-thick) no-repeat,
+    linear-gradient(var(--aim-color), var(--aim-color)) top   right / var(--aim-thick) var(--aim-corner) no-repeat,
+    /* Sol alt */
+    linear-gradient(var(--aim-color), var(--aim-color)) bottom left  / var(--aim-corner) var(--aim-thick) no-repeat,
+    linear-gradient(var(--aim-color), var(--aim-color)) bottom left  / var(--aim-thick) var(--aim-corner) no-repeat,
+    /* Sağ alt */
+    linear-gradient(var(--aim-color), var(--aim-color)) bottom right / var(--aim-corner) var(--aim-thick) no-repeat,
+    linear-gradient(var(--aim-color), var(--aim-color)) bottom right / var(--aim-thick) var(--aim-corner) no-repeat;
+  opacity: 0;
+  transform: scale(.98);
+  transition: opacity .18s ease, transform .18s ease;
+}
+
+.album.is-aim::before { opacity: 1; transform: scale(1); }
+
+/* İsteğe bağlı: hedef modunda kapak hafif sakinleşsin */
+.album.is-aim img { transform: scale(1.06); }
