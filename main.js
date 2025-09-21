@@ -421,4 +421,125 @@ async function init(){
   setupAlbums();
 }
 
+// ==== Custom Cursor (masaüstü) ==== //
+(function(){
+  const isDesktopPointer = window.matchMedia('(pointer: fine)').matches;
+  if (!isDesktopPointer) return; // mobil/tablet dokunmatiklerde kapalı
+
+  const cursor = document.getElementById('cursor');
+  if (!cursor) return;
+
+  // Sistem imlecini gizlemek için body'ye sınıf ver
+  document.body.classList.add('cursor-hide');
+
+  let x = window.innerWidth / 2, y = window.innerHeight / 2;
+  let cx = x, cy = y;
+
+  // 1 = anlık takip (lag yok). İstersen 0.15–0.25 arası “yumuşak” yap.
+  const CURSOR_EASE = 0.25;
+
+  // Çok ince hizalama düzeltmesi için (gerekirse -1, +1 gibi küçük değerler verin)
+  const OFFSET_X = -10;
+  const OFFSET_Y = -9;
+
+  // Hedef: tıklanabilir seçimler (gerekirse genişletin)
+  const HOVER_SELECTOR = 'a, button, .album, [role="button"], .play-button';
+
+  function onMouseMove(e){
+    x = e.clientX; y = e.clientY;
+    cursor.classList.add('is-visible');
+    cursor.classList.remove('is-hidden');
+  }
+  function onMouseEnter(){ cursor.classList.add('is-visible'); cursor.classList.remove('is-hidden'); }
+  function onMouseLeave(){ cursor.classList.remove('is-visible'); cursor.classList.add('is-hidden'); }
+
+  function onMouseDown(){ cursor.classList.add('is-down'); }
+  function onMouseUp(){ cursor.classList.remove('is-down'); }
+
+  // Metin alanlarında özel imleci gizle, sistem imlecini göster
+  function toggleForTextTarget(e){
+    const el = e.target;
+    const isText =
+      el.matches?.('input, textarea, select, [contenteditable="true"]') ||
+      el.closest?.('[contenteditable="true"]');
+    if (isText) {
+      cursor.classList.add('is-hidden');
+      document.body.classList.remove('cursor-hide'); // sistem imleci geri
+    } else {
+      cursor.classList.remove('is-hidden');
+      document.body.classList.add('cursor-hide');    // sistem imlecini gizle
+    }
+  }
+
+  // Hover büyütme
+  function onOver(e){
+    if (e.target.closest(HOVER_SELECTOR)) cursor.classList.add('is-hover');
+  }
+  function onOut(e){
+    if (e.target.closest(HOVER_SELECTOR)) cursor.classList.remove('is-hover');
+  }
+
+  // Akıcı takip döngüsü
+  
+  function loop(){
+    if (CURSOR_EASE === 1) {
+      cx = x; cy = y;                 // anlık
+    } else {
+      cx += (x - cx) * CURSOR_EASE;   // yumuşak
+      cy += (y - cy) * CURSOR_EASE;
+    }
+
+     function enterAim(card){
+    card.classList.add('is-aim');
+    cursor.classList.add('is-aim');
+    aimedCard = card;
+  }
+  function leaveAim(){
+    aimedCard?.classList.remove('is-aim');
+    cursor.classList.remove('is-aim');
+    aimedCard = null;
+  }
+
+  // Albüm üzerine gelince hedef moduna gir
+  document.addEventListener('mouseover', (e)=>{
+    const card = e.target.closest?.('.album');
+    if (card && card !== aimedCard) enterAim(card);
+    else if (!card && aimedCard) leaveAim();
+  }, { passive: true });
+
+  // Karttan çıkınca hedef modunu bırak
+  document.addEventListener('mouseout', (e)=>{
+    const toCard = e.relatedTarget?.closest?.('.album');
+    if (!toCard && aimedCard) leaveAim();
+  }, { passive: true });
+
+  // Panel açılırsa vs. güvene alın (gerekirse)
+  window.addEventListener('blur', leaveAim);
+  cursor.style.transform = `translate3d(${cx + OFFSET_X}px, ${cy + OFFSET_Y}px, 0) translate(-50%,-50%)`;
+  requestAnimationFrame(loop);
+  }
+  
+  requestAnimationFrame(loop);
+
+  // Olaylar
+  window.addEventListener('mousemove', onMouseMove, { passive: true });
+  window.addEventListener('mouseenter', onMouseEnter, { passive: true });
+  window.addEventListener('mouseleave', onMouseLeave, { passive: true });
+  window.addEventListener('mousedown', onMouseDown, { passive: true });
+  window.addEventListener('mouseup', onMouseUp, { passive: true });
+  document.addEventListener('mouseover', onOver, { passive: true });
+  document.addEventListener('mouseout', onOut, { passive: true });
+  document.addEventListener('pointerdown', toggleForTextTarget, { passive: true });
+  document.addEventListener('pointermove', toggleForTextTarget, { passive: true });
+
+  // Panel açıkken (mobilde çalışmıyor zaten), isterseniz özel imleci gizleyebilirsiniz:
+  // panel?.addEventListener('transitionend', ()=> { /* cursor.classList.toggle('is-hidden', panel.classList.contains('open')); */ });
+
+  // Hareket kısıtlaması olanlar için animasyonu kapat
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    cursor.style.transition = 'none';
+  }
+})();
+
+
 init().then(()=> openFromHash());
