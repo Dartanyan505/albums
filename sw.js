@@ -2,7 +2,7 @@
 /* Album Site — Service Worker
    Cache-first for images (covers), SWR for APIs and same-origin assets.
 */
-const VERSION = 'v1.0.1';
+const VERSION = 'v1.0.5';
 const STATIC_CACHE = `static-${VERSION}`;
 const IMG_CACHE = `img-${VERSION}`;
 const API_CACHE = `api-${VERSION}`;

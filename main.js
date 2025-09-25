@@ -643,50 +643,58 @@ async function openFromHash(){
 /* =============================
    Header arrow + hero line
 ============================= */
-function ensureScrollArrow(){
+function ensureScrollArrow(threshold = 0.25){  
+  // threshold: header yüksekliğinin yüzde kaçı (0.25 = %25)
+
   const header = document.getElementById("siteHeader");
-  if(!header) return;
+  if (!header) return;
 
   let arrow = header.querySelector(".scroll-down");
   let line  = header.querySelector(".hero-line");
 
-  if(!arrow){
+  if (!arrow) {
     arrow = document.createElement("div");
     arrow.className = "scroll-down";
-    arrow.innerHTML = `<span class="scroll-down-inner"><svg width="36" height="36" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v14m0 0l-6-6m6 6l6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>`;
+    arrow.innerHTML = `<svg width="36" height="36" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v14m0 0l-6-6m6 6l6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
     header.appendChild(arrow);
-  } else if (!arrow.querySelector(".scroll-down-inner")) {
-    const wrap = document.createElement("span");
-    wrap.className = "scroll-down-inner";
-    wrap.innerHTML = arrow.innerHTML;
-    arrow.innerHTML = "";
-    arrow.appendChild(wrap);
   }
-
-  if(!line){
+  if (!line) {
     line = document.createElement("div");
     line.className = "hero-line";
     header.appendChild(line);
   }
 
-  arrow.addEventListener("click",()=>{
-    const target = document.getElementById("stage") || document.querySelector("main") || document.body;
-    target.scrollIntoView({behavior:"smooth", block:"start"});
+  arrow.addEventListener("click", () => {
+    (document.getElementById("stage") || document.body)
+      .scrollIntoView({ behavior: "smooth", block: "start" });
   });
 
-  const onScroll = () => {
-    const max = Math.min((window.innerHeight || 1) * 0.6, 500);
-    const sc  = Math.min(window.scrollY, max);
+  let lastActive = null;
+  function tick(){
+    const r  = header.getBoundingClientRect();
+    const hh = Math.max(1, r.height);
+    const topGone = Math.max(0, -r.top);
+    const max = Math.min(hh * 0.6, 500);
+    const sc  = Math.min(topGone, max);
     const t   = max ? (sc / max) : 0;
-    line.classList.toggle("active", t > 0.05);
-    line.style.transform = `translateX(-50%) scaleX(${Math.max(0.001, t).toFixed(3)})`;
-    line.style.opacity = t > 0.05 ? "1" : "0";
-    arrow.style.opacity = String(1 - t);
-    arrow.style.pointerEvents = t > 0.95 ? "none" : "auto";
-  };
-  onScroll();
-  window.addEventListener("scroll", onScroll, { passive: true });
+
+    const isActive = t > threshold;
+
+    if (isActive !== lastActive) {
+      // Çizgi
+      line.classList.toggle("active", isActive);
+      line.style.opacity = isActive ? "1" : "0";
+      // Ok
+      arrow.style.opacity = isActive ? "0" : "1";
+      arrow.style.pointerEvents = isActive ? "none" : "auto";
+      lastActive = isActive;
+    }
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
 }
+
+
 
 let topZ = 10; // başlangıç z-index
 
@@ -961,7 +969,7 @@ function setupAlbums() {
 ============================= */
 async function init() {
   computeParams();
-  ensureScrollArrow();
+  ensureScrollArrow(0.60);
 
   stage        = document.getElementById("stage");
   panel        = document.getElementById("panel");
