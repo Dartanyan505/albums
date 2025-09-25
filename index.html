@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Albüm Koleksiyonum</title>
   <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.2/color-thief.umd.js"></script>
 </head>
 <body>
 
@@ -28,6 +29,18 @@
     <div class="hero-line"></div>
   </header>
 
+  <!-- Loader -->
+<div id="loader">
+  <div id="loader-stage"></div>
+</div>
+
+<!-- Albüm sahnesi -->
+
+
+<!-- Panel -->
+
+
+
   <!-- Albüm grid sahnesi -->
   <main id="stage">
     <!-- Albümler JS ile buraya gelecek -->
@@ -40,7 +53,8 @@
       <h3 id="panelTitle"></h3>
       <button id="panelClose">&times;</button>
     </header>
-    <div id="panelContent"></div>
+    <div id="panelContent"><img id="panelCover" class="album-cover" alt="" loading="lazy" decoding="async" style="display:none"/>
+</div>
   </aside>
 
   <!-- Özel imleç -->

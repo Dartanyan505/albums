@@ -1,21 +1,8 @@
 [
   {
     "artist": "Radiohead",
-    "title": "Pablo Honey",
-    "spotify": "https://open.spotify.com/album/3gBVdu4a1MMJVMy6vwPEb8",
-    "ytmusic": "https://music.youtube.com/playlist?list=OLAK5uy_lCl8VFn-xBO9PlDF2E0FXSjhaU0dLJP9I",
-    "apple": "https://music.apple.com/us/album/pablo-honey/1097862062"
-  },
-  {
-    "artist": "Radiohead",
-    "title": "The Bends",
-    "spotify": "https://open.spotify.com/album/35UJLpClj5EDrhpNIi4DFg",
-    "ytmusic": "https://music.youtube.com/playlist?list=OLAK5uy_mjfZt29ZKuw9FnglSH4_LLqWBPIPicLjI",
-    "apple": "https://music.apple.com/us/album/the-bends/1097862703"
-  },
-  {
-    "artist": "Radiohead",
     "title": "OK Computer",
+    "year": 1997,
     "spotify": "https://open.spotify.com/album/6dVIqQ8qmQ5GBnJ9shOYGE",
     "ytmusic": "https://music.youtube.com/browse/MPREb_yXhSI4FCUo6",
     "apple": "https://music.apple.com/us/album/ok-computer/1097861387"
@@ -23,127 +10,166 @@
   {
     "artist": "Radiohead",
     "title": "Kid A",
+    "year": 2000,
     "spotify": "https://open.spotify.com/album/6GjwtEZcfenmOf6l18N7T7",
     "ytmusic": "https://music.youtube.com/playlist?list=OLAK5uy_lDotrFl8LXo4UMq_XeVB1areFI_b8Par8",
     "apple": "https://music.apple.com/us/album/kid-a/1097862870"
   },
   {
     "artist": "Radiohead",
-    "title": "Amnesiac",
-    "spotify": "https://open.spotify.com/album/1HrMmB5useeZ0F5lHrMvl0",
-    "ytmusic": "https://music.youtube.com/browse/MPREb_DyYPOfs7HPD",
-    "apple": "https://music.apple.com/us/album/amnesiac/1097864180"
-  },
-  {
-    "artist": "Radiohead",
-    "title": "Hail to the Thief",
-    "spotify": "https://open.spotify.com/album/5mzoI3VH0ZWk1pLFR6RoYy",
-    "ytmusic": "https://music.youtube.com/playlist?list=OLAK5uy_mRDhp5c2KZe2Penu4PLevXa7z5cBk4DXY",
-    "apple": "https://music.apple.com/us/album/hail-to-the-thief/1097863576"
-  },
-  {
-    "artist": "Radiohead",
     "title": "In Rainbows",
+    "year": 2007,
     "spotify": "https://open.spotify.com/album/5vkqYmiPBYLaalcmjujWxK",
     "ytmusic": "https://music.youtube.com/playlist?list=OLAK5uy_m59x-hBFsC789l1_qWwFXwH3gjntwy_CA",
     "apple": "https://music.apple.com/us/album/in-rainbows/1109714933"
   },
-  {
-    "artist": "Radiohead",
-    "title": "The King of Limbs",
-    "spotify": "https://open.spotify.com/album/3P17levwUPzmFfLYdAK3A7",
-    "ytmusic": "https://music.youtube.com/playlist?list=OLAK5uy_kkxS8q1obnji_VjkWtpgWgpZAzAePSSA0",
-    "apple": "https://music.apple.com/us/album/the-king-of-limbs/1109714965"
-  },
-  {
-    "artist": "Radiohead",
-    "title": "A Moon Shaped Pool",
-    "spotify": "https://open.spotify.com/album/2ix8vWvvSp2Yo7rKMiWpkg",
-    "ytmusic": "https://music.youtube.com/playlist?list=OLAK5uy_l2JdqQ9q-aHSQmRiz3NfIkU2kkbxd1-ps",
-    "apple": "https://music.apple.com/us/album/a-moon-shaped-pool/1111577743"
-  },
+
   {
     "artist": "Daft Punk",
     "title": "Discovery",
-    "desc": "House ve disco unsurlarını harmanlayan kült albüm."
+    "year": 2001,
+    "desc": "House ve disco unsurlarını harmanlayan kült albüm.",
+    "spotify": "https://open.spotify.com/album/2noRn2Aes5aoNVsU6iWThc",
+    "ytmusic": "https://music.youtube.com/playlist?list=OLAK5uy_mz6eafmqdRHSaR4IwG0ll6J6rgv0_ZpGw",
+    "apple": "https://music.apple.com/us/album/discovery/1440843985"
   },
   {
     "artist": "Daft Punk",
     "title": "Homework",
-    "desc": "Fransız elektronik müziğinin çıkış noktalarından."
+    "year": 1997,
+    "desc": "Fransız elektronik müziğinin çıkış noktalarından.",
+    "spotify": "https://open.spotify.com/album/2T7DdrOvsqOqU9bGTkjBYu",
+    "ytmusic": "https://music.youtube.com/playlist?list=OLAK5uy_lAbfrCq-BVAU2Z2yAIjsEN0jwghzcAFSY",
+    "apple": "https://music.apple.com/us/album/homework/1440798607"
   },
   {
     "artist": "Daft Punk",
     "title": "Random Access Memories",
-    "desc": "2013’te çıkıp Grammy ödüllerini süpüren retro-funk şaheseri."
+    "year": 2013,
+    "desc": "2013’te çıkıp Grammy ödüllerini süpüren retro-funk şaheseri.",
+    "spotify": "https://open.spotify.com/album/4m2880jivSbbyEGAKfITCa",
+    "ytmusic": "https://music.youtube.com/playlist?list=OLAK5uy_kNhM2yaBTOVwrcZJepB1C9P3-n5_Sfy5c",
+    "apple": "https://music.apple.com/us/album/random-access-memories/617154241"
   },
 
   {
     "artist": "Pink Floyd",
     "title": "The Dark Side of the Moon",
-    "desc": "Rock tarihinin en ikonik albümlerinden, 1973."
+    "year": 1973,
+    "desc": "Rock tarihinin en ikonik albümlerinden, 1973.",
+    "spotify": "https://open.spotify.com/album/4LH4d3cOWNNsVw41Gqt2kv",
+    "ytmusic": "https://music.youtube.com/playlist?list=OLAK5uy_mXoi-FuQb9Gw7Mguhdx5F4jltT0L1qOCw",
+    "apple": "https://music.apple.com/us/album/the-dark-side-of-the-moon/1065973694"
   },
   {
     "artist": "Pink Floyd",
     "title": "Wish You Were Here",
-    "desc": "Syd Barrett’e ithaf edilen duygusal albüm."
+    "year": 1975,
+    "desc": "Syd Barrett’e ithaf edilen duygusal albüm.",
+    "spotify": "https://open.spotify.com/album/0bCAjiUamIFqKJsekOYuRw",
+    "ytmusic": "https://music.youtube.com/playlist?list=OLAK5uy_klU9jB4SMO5SqEyFazPAVbDek2j0JVQxY",
+    "apple": "https://music.apple.com/us/album/wish-you-were-here/1065973719"
   },
   {
     "artist": "Pink Floyd",
     "title": "Animals",
-    "desc": "Kapitalizm eleştirisiyle dolu karanlık bir konsept albüm."
+    "year": 1977,
+    "desc": "Kapitalizm eleştirisiyle dolu karanlık bir konsept albüm.",
+    "spotify": "https://open.spotify.com/album/21jF5jlMtzo94wbxmJ18aa",
+    "ytmusic": "",
+    "apple": "https://music.apple.com/us/album/animals-2018-remix/1631582682"
   },
   {
     "artist": "Pink Floyd",
     "title": "The Wall",
-    "desc": "1979 tarihli dev konsept albüm ve rock operası."
+    "year": 1979,
+    "desc": "1979 tarihli dev konsept albüm ve rock operası.",
+    "spotify": "https://open.spotify.com/album/6WaXI52Lqr5p2cmZ8g2a9J",
+    "ytmusic": "",
+    "apple": "https://music.apple.com/us/album/the-wall/1065973698"
   },
 
   {
     "artist": "Arctic Monkeys",
     "title": "AM",
-    "desc": "2013 çıkışlı, modern indie rock’ın mihenk taşı."
+    "year": 2013,
+    "desc": "2013 çıkışlı, modern indie rock’ın mihenk taşı.",
+    "spotify": "https://open.spotify.com/album/78bpIziExqiI9qztvNFlQu",
+    "ytmusic": "https://music.youtube.com/playlist?list=OLAK5uy_kk162BW2lzsM8QE54N8nt6dvmsM9gdn4M",
+    "apple": "https://music.apple.com/us/album/am/663097964"
   },
   {
     "artist": "Arctic Monkeys",
     "title": "Favourite Worst Nightmare",
-    "desc": "Hızlı ritimleri ve enerjik parçalarıyla bilinir."
+    "year": 2007,
+    "desc": "Hızlı ritimleri ve enerjik parçalarıyla bilinir.",
+    "spotify": "https://open.spotify.com/album/1XkGORuUX2QGOEIL4EbJKm",
+    "ytmusic": "https://music.youtube.com/browse/MPREb_T27e2ubslye",
+    "apple": "https://music.apple.com/us/album/favourite-worst-nightmare/251499221"
   },
 
   {
     "artist": "Coldplay",
     "title": "Parachutes",
-    "desc": "Grubun çıkış albümü, duygusal balladlarıyla öne çıkar."
+    "year": 2000,
+    "desc": "Grubun çıkış albümü, duygusal balladlarıyla öne çıkar.",
+    "spotify": "https://open.spotify.com/album/6ZG5lRT77aJ3btmArcykra",
+    "ytmusic": "https://music.youtube.com/playlist?list=OLAK5uy_mO6LoBQmkXq6ZPyLQ6snqEs_IBlmbZAao",
+    "apple": "https://music.apple.com/us/album/parachutes/1122782080"
   },
   {
     "artist": "Coldplay",
     "title": "A Rush of Blood to the Head",
-    "desc": "Grammy ödüllü, piyanonun ön planda olduğu klasik bir albüm."
+    "year": 2002,
+    "desc": "Grammy ödüllü, piyanonun ön planda olduğu klasik bir albüm.",
+    "spotify": "https://open.spotify.com/album/0RHX9XECH8IVI3LNgWDpmQ",
+    "ytmusic": "https://music.youtube.com/playlist?list=OLAK5uy_k2FivlV4BFfc5fGkDXmmt_gTGAqhN00YE",
+    "apple": "https://music.apple.com/us/album/a-rush-of-blood-to-the-head/1122775993"
   },
   {
     "artist": "Coldplay",
     "title": "Viva la Vida or Death and All His Friends",
-    "desc": "2008’de çıkış yapan, orkestra düzenlemeleriyle dikkat çeken albüm."
+    "year": 2008,
+    "desc": "2008’de çıkış yapan, orkestra düzenlemeleriyle dikkat çeken albüm.",
+    "spotify": "https://open.spotify.com/album/1CEODgTmTwLyabvwd7HBty",
+    "ytmusic": "https://music.youtube.com/playlist?list=OLAK5uy_nmbMgarmVfnDoBXYB-fDEr0lkSBE00mpk",
+    "apple": "https://music.apple.com/us/album/viva-la-vida-or-death-and-all-his-friends/1122773394"
   },
 
   {
     "artist": "Kendrick Lamar",
     "title": "good kid, m.A.A.d city",
-    "desc": "Los Angeles sokaklarını anlatan otobiyografik bir şaheser."
+    "year": 2012,
+    "desc": "Los Angeles sokaklarını anlatan otobiyografik bir şaheser.",
+    "spotify": "https://open.spotify.com/album/6PBZN8cbwkqm1ERj2BGXJ1",
+    "ytmusic": "https://music.youtube.com/playlist?list=OLAK5uy_m0jKqkYw0b2Rqe1oWb0qI4cLaG8P3Jb8I",
+    "apple": "https://music.apple.com/us/album/good-kid-m-a-a-d-city/1471263898"
   },
   {
     "artist": "Kendrick Lamar",
     "title": "To Pimp a Butterfly",
-    "desc": "Jazz, funk ve hip-hop’u birleştiren politik açıdan güçlü bir albüm."
+    "year": 2015,
+    "desc": "Jazz, funk ve hip-hop’u birleştiren politik açıdan güçlü bir albüm.",
+    "spotify": "https://open.spotify.com/album/7ycBtnsMtyVbbwTfJwRjSP",
+    "ytmusic": "https://music.youtube.com/playlist?list=OLAK5uy_kbB7v1ZKcKk6Xqj9t-N7eB7XGQbQxN5bQ",
+    "apple": "https://music.apple.com/us/album/to-pimp-a-butterfly/1440828886"
   },
   {
     "artist": "Kendrick Lamar",
     "title": "DAMN.",
-    "desc": "2017’de çıkan, Pulitzer ödüllü albüm."
+    "year": 2017,
+    "desc": "2017’de çıkan, Pulitzer ödüllü albüm.",
+    "spotify": "https://open.spotify.com/album/4eLPsYPBmXABThSJ821sqY",
+    "ytmusic": "https://music.youtube.com/browse/MPREb_naYFqhGVxwD",
+    "apple": "https://music.apple.com/us/album/damn/1440881047"
   },
   {
     "artist": "Kendrick Lamar",
     "title": "Mr. Morale & The Big Steppers",
-    "desc": "2022’de çıkan, kişisel temalarıyla öne çıkan albüm."
+    "year": 2022,
+    "desc": "2022’de çıkan, kişisel temalarıyla öne çıkan albüm.",
+    "spotify": "https://open.spotify.com/album/79ONNoS4M9tfIA1mYLBYVX",
+    "ytmusic": "https://music.youtube.com/playlist?list=OLAK5uy_mqQKk2w2J7n6Sxv2V6u1d3lD7T2x4r8Vw",
+    "apple": "https://music.apple.com/us/album/mr-morale-the-big-steppers/1623854804"
   }
 ]

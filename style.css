@@ -1,728 +1,370 @@
+/* =========================================================
+   Root vars (boyut tek kaynaktan)
+========================================================= */
 :root {
+  --size: 220px;                 /* varsayılan kapak boyutu */
   --radius: 16px;
   --shadow: 0 8px 22px rgba(0,0,0,.48);
 }
 
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
+/* Tablet ve küçük ekran */
+@media (max-width: 1024px) { :root { --size: 180px; } }
+/* Telefon */
+@media (max-width: 640px)  { :root { --size: min(38vw, 140px); } }
+/* Çok dar telefon */
+@media (max-width: 360px)  { :root { --size: min(42vw, 120px); } }
 
-/* ==== Arka plan parallax ==== */
+/* =========================================================
+   Reset / base
+========================================================= */
+html, body { height: 100%; margin: 0; padding: 0; }
 body {
   font-family: 'Inter', sans-serif;
   color: #fff;
-  background: #0a0a0a; /* koyu temel zemin */
+  background: #0a0a0a;
   overflow-x: hidden;
   position: relative;
 }
 
+/* =========================================================
+   Parallax background
+========================================================= */
 .bg-layer {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  z-index: -1;
-  overflow: hidden;
+  position: fixed; inset: 0; z-index: -1; overflow: hidden;
 }
-
 .bg-circle {
-  position: absolute;
-  border-radius: 50%;
-  opacity: 0.4;
+  position: absolute; border-radius: 50%; opacity: 0.4;
   filter: blur(120px);
   animation: floaty 40s infinite alternate ease-in-out;
 }
-
-/* Renkli katmanlar */
-.bg-circle.c1 {
-  width: 700px; height: 700px;
-  top: -200px; left: -200px;
-  background: radial-gradient(circle, rgba(236,72,153,0.7), transparent 70%);
-}
-.bg-circle.c2 {
-  width: 600px; height: 600px;
-  bottom: -250px; right: -250px;
-  background: radial-gradient(circle, rgba(56,189,248,0.7), transparent 70%);
-  animation-delay: 10s;
-}
-.bg-circle.c3 {
-  width: 500px; height: 500px;
-  top: 40%; left: 30%;
-  background: radial-gradient(circle, rgba(34,197,94,0.7), transparent 70%);
-  animation-delay: 20s;
-}
+.bg-circle.c1 { width: 700px; height: 700px; top: -200px; left: -200px;
+  background: radial-gradient(circle, rgba(236,72,153,0.7), transparent 70%); }
+.bg-circle.c2 { width: 600px; height: 600px; bottom: -250px; right: -250px;
+  background: radial-gradient(circle, rgba(56,189,248,0.7), transparent 70%); animation-delay: 10s; }
+.bg-circle.c3 { width: 500px; height: 500px; top: 40%; left: 30%;
+  background: radial-gradient(circle, rgba(34,197,94,0.7), transparent 70%); animation-delay: 20s; }
 
 @keyframes floaty {
   from { transform: translateY(0) translateX(0) scale(1); }
   to   { transform: translateY(-80px) translateX(60px) scale(1.2); }
 }
 
-
-/* ==== Hero ==== */
+/* =========================================================
+   Hero
+========================================================= */
 #siteHeader.hero {
   position: relative;
-  height: 100vh;
-  height: 100svh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  overflow: hidden;
-  background: transparent; /* arka planını istediğin gibi ayarla */
-  z-index: 1;
+  height: 100vh; height: 100svh;
+  display: flex; align-items: center; justify-content: center;
+  text-align: center; overflow: hidden; background: transparent; z-index: 1;
 }
+.hero-inner { max-width: 800px; padding: 0 20px; position: relative; z-index: 2; }
 
-.hero-line {
-  position: absolute;
-  bottom: calc(24px + env(safe-area-inset-bottom, 0px));
-  left: 50%;
-  transform: translateX(-50%) scaleX(0);
-  transform-origin: center;
-  width: 20vw; /* 🔑 ekran genişliğinin %20’si */
-  max-width: 300px; /* masaüstünde çok uzun olmasın */
-  min-width: 80px;  /* mobilde çok kısa kalmasın */
-  height: 3px;
-  border-radius: 2px;
-  background: linear-gradient(90deg, #38bdf8, #ec4899, #22c55e);
-  transition: transform 0.5s ease, opacity 0.5s ease;
-  opacity: 0;
-  overflow: hidden;
-  z-index: 3; width: min(86%, 620px); }
-
-.hero-inner {
-  max-width: 800px;
-  padding: 0 20px;
-  position: relative;
-  z-index: 2; /* overlay ve çizgi üstünde */
-}
-
-#siteHeader h1, 
-#siteHeader p {
-  opacity: 0;
-  transform: translateY(20px);
+#siteHeader h1, #siteHeader p {
+  opacity: 0; transform: translateY(20px);
   animation: fadeUp 1s ease forwards;
 }
 #siteHeader h1 {
-  margin: 0;
-  font-size: clamp(24px, 6vw, 64px); /* 🔑 daha esnek */
-  font-weight: 800;
+  margin: 0; font-size: clamp(24px, 6vw, 64px); font-weight: 800;
   font-family: 'Poppins', sans-serif;
   background: linear-gradient(90deg, #38bdf8, #ec4899, #22c55e);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
   text-shadow: 0 3px 18px rgba(0,0,0,0.4);
   animation-delay: .2s;
 }
-
 #siteHeader p {
-  margin-top: 16px;
-  font-size: clamp(16px, 3vw, 22px);
-  color: rgba(255,255,255,0.85);
+  margin-top: 16px; font-size: clamp(16px, 3vw, 22px); color: rgba(255,255,255,0.85);
   animation-delay: .6s;
 }
 
-/* ==== Scroll Down Ok ==== */
+/* Scroll down */
 .scroll-down {
-  position: absolute;
-  bottom: calc(24px + env(safe-area-inset-bottom, 0px));
-  left: 50%;
-  transform: translateX(-50%) scale(1);
-  opacity: 1;
-  cursor: pointer;
-  transition: opacity 0.5s ease, transform 0.5s ease;
-  z-index: 3; }
-
+  position: absolute; bottom: calc(24px + env(safe-area-inset-bottom,0px));
+  left: 50%; transform: translateX(-50%);
+  opacity: 1; cursor: pointer; transition: opacity .5s ease, transform .5s ease; z-index: 3;
+}
 .scroll-down svg {
-  width: 40px;
-  height: 40px;
-  stroke: #fff;
-  stroke-width: 2.5;
+  width: 40px; height: 40px; stroke: #fff; stroke-width: 2.5;
   filter: drop-shadow(0 0 8px rgba(255,255,255,0.9));
-  transition: filter 0.3s ease;
+  animation: bob 1.8s ease-in-out infinite;
 }
-
-.scroll-down.to-line {
-  transform: translateX(-50%) scale(0.3); /* küçülerek kaybolur */
-  opacity: 0;
-}
-
+.scroll-down.to-line { transform: translateX(-50%) scale(0.3); opacity: 0; }
 .scroll-down:hover svg {
-  filter: drop-shadow(0 0 14px rgba(255,255,255,1))
-          drop-shadow(0 0 22px rgba(255,255,255,0.9));
+  filter: drop-shadow(0 0 14px rgba(255,255,255,1)) drop-shadow(0 0 22px rgba(255,255,255,0.9));
 }
+.scroll-down.show-bounce { opacity: 1; animation: bounce 1.6s infinite ease-in-out; }
+.scroll-down.faded { opacity: 0 !important; pointer-events: none; }
 
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translate(-50%, 20px); }
-  to   { opacity: 1; transform: translate(-50%, 0); }
-}
-
-
-/* ==== Renkli Çizgi ==== */
+/* Renkli çizgi */
 .hero-line {
   position: absolute;
-  bottom: 40px; /* okun tam hizasında */
-  left: 50%;
-  transform: translateX(-50%) scaleX(0); /* kapalı başlar */
+  bottom: calc(24px + env(safe-area-inset-bottom,0px));
+  left: 50%; transform: translateX(-50%) scaleX(0);
   transform-origin: center;
-  width: 160px;
-  height: 3px;
-  border-radius: 2px;
+  width: 160px; max-width: 300px; min-width: 80px; height: 3px; border-radius: 2px;
   background: linear-gradient(90deg, #38bdf8, #ec4899, #22c55e);
-  transition: transform 0.5s ease, opacity 0.5s ease;
-  opacity: 0;
-  overflow: hidden;
-  z-index: 3; width: min(86%, 620px); }
-
+  transition: transform .5s ease, opacity .5s ease;
+  opacity: 0; overflow: hidden; z-index: 3;
+}
 .hero-line::after {
-  content: "";
-  position: absolute;
-  top: 0; left: -50%;
-  width: 50%; height: 100%;
-  background: linear-gradient(90deg, rgba(255,255,255,0.8), transparent);
-  transform: skewX(-20deg);
-  opacity: 0;
+  content:""; position:absolute; top:0; left:-50%; width:50%; height:100%;
+  background: linear-gradient(90deg, rgba(255,255,255,.8), transparent);
+  transform: skewX(-20deg); opacity:0;
 }
-
-/* Çizgi aktif olunca açılır */
-.hero-line.active {
-  transform: translateX(-50%) scaleX(1);
-  opacity: 1;
-}
-
-/* Çizgi açık kaldığı sürece parlama animasyonu */
-.hero-line.active::after {
-  animation: shine 3s infinite;
-}
+.hero-line.active { transform: translateX(-50%) scaleX(1); opacity: 1; }
+.hero-line.active::after { animation: shine 3s infinite; }
 
 @keyframes shine {
-  0%   { left: -50%; opacity: 0; }
-  20%  { opacity: 1; }
-  50%  { left: 120%; opacity: 0; }
-  100% { left: 120%; opacity: 0; }
+  0% { left: -50%; opacity: 0; } 20% { opacity: 1; }
+  50% { left: 120%; opacity: 0; } 100% { left: 120%; opacity: 0; }
 }
-
-/* Animations */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-.scroll-down.show-bounce { opacity: 1; animation: bounce 1.6s infinite ease-in-out; }
-.scroll-down svg { width: 40px; height: 40px; }
-
 @keyframes fadeUp { from{opacity:0; transform:translateY(20px);} to{opacity:1; transform:translateY(0);} }
-@keyframes fadeInLine { from{opacity:0; transform:translateX(-50%) scaleX(0.5);} to{opacity:1; transform:translateX(-50%) scaleX(1);} }
-@keyframes fadeInUp { from{opacity:0; transform:translate(-50%,20px);} to{opacity:1; transform:translate(-50%,0);} }
 @keyframes bounce { 0%,100%{transform:translate(-50%,0);} 50%{transform:translate(-50%,10px);} }
+@keyframes bob { 0%{transform:translateY(0);} 50%{transform:translateY(6px);} 100%{transform:translateY(0);} }
 
-/* ==== Grid Albümler ==== */
-#stage {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 24px;
-  padding: 40px;
-  justify-items: center;
-}
+/* =========================================================
+   STAGE: (floating layout için) - GRID KALDIRILDI
+========================================================= */
+#stage { position: relative; width: 100%; min-height: 100vh; padding: 40px 16px; }
 
-@media (max-width: 480px) {
-  #stage {
-    grid-template-columns: repeat(2, 1fr); /* 🔑 2 sütuna sabitle */
-    padding: 16px;   /* küçük ekranda taşmayı önlemek için */
-    gap: 12px;
-  }
-}
-
-/* 481–599 px arası da 2 sütun kalsın */
-@media (min-width: 481px) and (max-width: 599px) {
-  #stage,
-  .album-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-
-.album {
-  position: relative;
-  width: 220px;
-  height: 220px;
+/* =========================================================
+   Album card — TEK TANIM (her yerde absolute + var(--size))
+========================================================= */
+.album{
+  position: absolute;
+  width: var(--size);
+  height: var(--size);
   border-radius: var(--radius);
   overflow: hidden;
   box-shadow: var(--shadow);
   cursor: pointer;
   opacity: 0;
   transform: scale(0.95);
-  animation: fadeInZoom .6s forwards;
+  transition: left .8s ease, top .8s ease, transform .25s ease, box-shadow .25s ease;
+  will-change: transform, top, left;
+  user-select: none; z-index: 2;
 }
+.album.show{ animation: fadeInAlbum .6s ease forwards; }
+.album.on-top{ z-index: 999; transform: scale(1.05); }
+@keyframes fadeInAlbum{ from{opacity:0; transform:scale(0.9);} to{opacity:1; transform:scale(1);} }
 
-@keyframes fadeInZoom {
-  from { opacity:0; transform:scale(0.95); }
-  to   { opacity:1; transform:none; }
-}
+.album img{ width:100%; height:100%; object-fit:cover; display:block; }
 
-.album img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.4s ease;
-}
-
-/* Mobilde kartları %80 ölçekle (grid hücresine göre) */
-@media (max-width: 767px) {
-  .album {
-    width: 80% !important;
-    height: auto !important;
-    aspect-ratio: 1 / 1;
-  }
-}
-
-/* Hover veya mobil aktif */
-.album:hover img,
-.album.active img {
-  transform: scale(1.1);
-}
-
-/* Alt kısımdaki yazı overlay */
+/* Alt overlay */
 .overlay {
-  position:absolute; 
-  left:0; right:0; bottom:0; 
-  padding:8px 10px;
+  position:absolute; left:0; right:0; bottom:0; padding:8px 10px;
   background: linear-gradient(to top, rgba(0,0,0,.72), rgba(0,0,0,0));
-  font-size:13px; 
-  font-weight:600; 
-  opacity:0; 
-  transition:opacity .25s ease;
+  font-size:13px; font-weight:600; opacity:0; transition:opacity .25s ease;
 }
-.album:hover .overlay,
-.album.active .overlay {
-  opacity:1;
-}
+.album:hover .overlay, .album.active .overlay { opacity:1; }
+.overlay .title{ font-weight:700; font-size:14px; line-height:1.2; letter-spacing:.1px;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.overlay .artist{ margin-top:2px; font-weight:500; font-size:12px; line-height:1.15; letter-spacing:.2px;
+  color:rgba(255,255,255,.65); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  text-shadow:0 1px 6px rgba(0,0,0,.35); }
+.album:hover .overlay .artist, .album.active .overlay .artist { color: rgba(255,255,255,.78); }
 
-/* Orta overlay (info butonu için) */
-.album-overlay {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  background: rgba(0,0,0,0.45);
-  transition: opacity 0.3s ease;
+/* Orta overlay (info butonu) */
+.album-overlay{
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  opacity:0; background:rgba(0,0,0,.45); transition:opacity .3s ease;
 }
-
-.album:hover .album-overlay,
-.album.active .album-overlay {
-  opacity: 1;
+.album:hover .album-overlay, .album.active .album-overlay{ opacity:1; }
+.album-overlay button{
+  background: rgba(255,255,255,.85); border:none; border-radius:50%;
+  width:44px; height:44px; font-size:20px; font-weight:bold; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  transition: transform .2s ease, background .2s ease;
 }
+.album-overlay button:hover{ transform:scale(1.1); background:#fff; }
 
-/* Info butonu */
-.album-overlay button {
-  background: rgba(255,255,255,0.85);
-  border: none;
-  border-radius: 50%;
-  width: 44px;
-  height: 44px;
-  font-size: 20px;
-  font-weight: bold;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.2s ease, background 0.2s ease;
+@media (max-width: 767px){
+  .overlay .title{ font-size:13px; }
+  .overlay .artist{ font-size:11px; }
 }
 
-.album-overlay button:hover {
-  transform: scale(1.1);
-  background: #fff;
+/* =========================================================
+   Label (yüzen bölüm başlıkları için)
+========================================================= */
+.label{
+  position:absolute; transform:translate(-50%,-50%);
+  font-size: clamp(24px, 4.6vw, 44px); font-weight:900; letter-spacing:.02em;
+  color: rgba(255,255,255,.95); text-shadow:0 3px 18px rgba(0,0,0,.65);
+  -webkit-text-stroke: 1px rgba(0,0,0,0.18); pointer-events:none; z-index:2000;
+}
+.label::before{
+  content:""; position:absolute; inset:-10px -16px;
+  background: rgba(0,0,0,.22); filter: blur(10px); border-radius:14px; z-index:-1;
 }
 
-/* Overlay içi tipografi */
-.overlay .title {
-  font-weight: 700;
-  font-size: 14px;
-  line-height: 1.2;
-  letter-spacing: .1px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.overlay .artist {
-  margin-top: 2px;
-  font-weight: 500;
-  font-size: 12px;
-  line-height: 1.15;
-  letter-spacing: .2px;
-  color: rgba(255,255,255,0.65);        /* soluk görünüm */
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  text-shadow: 0 1px 6px rgba(0,0,0,0.35); /* okunurluk için hafif gölge */
-}
-
-/* İsteğe bağlı: Hover’da artist biraz daha belirginleşsin */
-.album:hover .overlay .artist,
-.album.active .overlay .artist {
-  color: rgba(255,255,255,0.78);
-}
-
-@media (max-width: 767px) {
-  .overlay .title { font-size: 13px; }
-  .overlay .artist { font-size: 11px; }
-}
-
-/* İkinci grid seti (kullanıyorsan) */
-.album-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 16px;
-  padding: 16px;
-}
-
-/* Küçük ekranlar için */
-@media (max-width: 480px) {
-  .album-grid {
-    grid-template-columns: repeat(2, 1fr); /* 2 sütun */
-  }
-}
-
-/* Orta ekranlar (tablet boyutları) */
-@media (min-width: 481px) and (max-width: 767px) {
-  .album-grid {
-    grid-template-columns: repeat(3, 1fr); /* 3 sütun */
-  }
-}
-
-/* Daha büyük ekranlar */
-@media (min-width: 768px) {
-  .album-grid {
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  }
-}
-
-
-/* ==== Panel ==== */
-/* Ortak panel stili */
+/* =========================================================
+   Panel
+========================================================= */
 .panel {
+  background: var(--panel-gradient, linear-gradient(to bottom, #111, #000));
   position: fixed;
-  background: #111;
   z-index: 5000;
   display: flex;
   flex-direction: column;
   color: #fff;
-  transition: transform .3s ease;
+  transition: background .35s ease, box-shadow .35s ease, color .2s ease, transform .3s ease;
+
+  /* animasyon için */
+  background-size: 200% 200%;
+  animation: panelShift 15s ease-in-out infinite alternate;
 }
 
-/* --- PC görünümü (sağdan) --- */
-@media (min-width: 768px) {
-  .panel {
-    top: 0;
-    right: 0;
-    height: 100vh;
-    width: min(92vw, 420px);
-    transform: translateX(100%); /* sağdan dışarıda başla */
+@keyframes panelShift {
+  from { background-position: 0% 0%; }
+  to   { background-position: 100% 100%; }
+}
+@media (min-width: 768px){
+  .panel{ top:0; right:0; height:100vh; width:min(92vw, 420px); transform: translateX(100%); }
+  .panel.open{ transform: translateX(0); }
+}
+@media (max-width: 767px){
+  .panel{
+    left:0; right:0; bottom:0; height: min(80vh, 700px); width:100%;
+    border-top-left-radius:16px; border-top-right-radius:16px;
+    box-shadow:0 -4px 12px rgba(0,0,0,.3); transform: translateY(100%);
   }
-  .panel.open {
-    transform: translateX(0); /* PC'de X ekseni animasyonu */
-  }
+  .panel.open{ transform: translateY(0); }
 }
+.panel header{ backdrop-filter: blur(2px);
 
-/* --- Mobil görünümü (aşağıdan) --- */
-@media (max-width: 767px) {
-  .panel {
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: min(80vh, 700px); /* uzun ekranlarda güvenli */
-    width: 100%;
-    border-top-left-radius: 16px;
-    border-top-right-radius: 16px;
-    box-shadow: 0 -4px 12px rgba(0,0,0,0.3);
-    transform: translateY(100%); /* alttan dışarıda başla */
-  }
-  .panel.open {
-    transform: translateY(0); /* sadece mobilde Y ekseni */
-  }
+  display:flex; justify-content:space-between; align-items:flex-start;
+  padding:10px 14px; border-bottom:1px solid rgba(255,255,255,0.1);
 }
+#panelClose{ background:none; border:none; font-size:22px; color:#fff; cursor:pointer; }
+#panelContent{ padding:14px; overflow:auto; flex:1; transition: transform .3s ease; }
+.panel img.album-cover{ width:100%; max-width:100%; height:auto; display:block; margin:0 auto; border-radius:12px; }
 
-.panel header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding: 10px 14px;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
+/* Overlay */
+#panelOverlay{
+  position: fixed; inset:0; background: rgba(0,0,0,0.4);
+  opacity:0; visibility:hidden; transition: opacity .3s ease; z-index: 4999;
 }
+@media (max-width:767px){ #panelOverlay.open{ opacity:1; visibility:visible; } }
+@media (min-width:768px){ #panelOverlay{ display:none !important; } }
 
-#panelClose {
-  background: none;
-  border: none;
-  font-size: 22px;
-  color: #fff;
-  cursor: pointer;
+/* Panel scrollbars gizle */
+#panel, #panelContent{
+  overflow:auto; -ms-overflow-style:none; scrollbar-width:none;
 }
+#panel::-webkit-scrollbar, #panelContent::-webkit-scrollbar{ width:0; height:0; }
 
-#panelContent {
-  padding: 14px;
-  overflow: auto;
-  flex: 1;
-  transition: transform 0.3s ease;
-}
+/* Mobilde panel açılınca body scroll kilidi */
+body.no-scroll{ overflow:hidden; }
 
-.panel img.album-cover {
-  height: auto;
-  display: block;
-  margin: 0 auto;
-  border-radius: 12px;
-  width: 100%;
-  max-width: 100%;
-}
+/* =========================================================
+   Loader (placeholder kartlar)
+========================================================= */
+#loader{ width:100%; margin-top:40px; display:flex; flex-direction:column; align-items:center; }
+#loader-stage{ display:flex; flex-wrap:wrap; gap:16px; justify-content:center; }
+#loader-stage .album{ pointer-events:none; cursor:default; transform:scale(0.7); opacity:1; }
+#loader-stage .album img{ width:var(--size); height:var(--size); border-radius:var(--radius); object-fit:cover; }
+#loader-stage .overlay{ display:none; }
 
-#panelOverlay {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.4);
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease;
-  z-index: 4999;
+/* Panel skeleton */
+.panel-skeleton {
+  width: 100%; aspect-ratio: 1 / 1;
+  background: linear-gradient(90deg, #222 25%, #333 50%, #222 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.2s infinite;
+  border-radius: 8px;
 }
+@keyframes skeleton-loading { 0%{background-position:200% 0;} 100%{background-position:-200% 0;} }
 
-/* sadece mobilde görünür */
-@media (max-width: 767px) {
-  #panelOverlay.open {
-    opacity: 1;
-    visibility: visible;
-  }
-}
-
-/* PC'de overlay her zaman gizli */
-@media (min-width: 768px) {
-  #panelOverlay {
-    display: none !important;
-  }
-}
-
-/* ==== Play Buttons ==== */
-.play-buttons {
-  display: flex;
-  gap: 8px;
-  margin-top: 8px;
-}
-.play-button {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  display: inline-block;
-  background-size: 100%;
-  background-repeat: no-repeat;
-  background-position: center;
+/* =========================================================
+   Play buttons
+========================================================= */
+.play-buttons{ display:flex; gap:8px; margin-top:8px; }
+.play-button{
+  width:36px; height:36px; border-radius:50%; display:inline-block;
+  background-size:100%; background-repeat:no-repeat; background-position:center;
   transition: transform .2s ease, box-shadow .2s ease;
 }
-.play-button:hover { transform: scale(1.1); box-shadow: 0 3px 8px rgba(0,0,0,0.3); }
-.play-button.spotify {background-image: url('spotify.png'); }
-.play-button.yt {background-image: url('yt-music.png'); }
-.play-button.apple {background-image: url('apple-music.png'); }
+.play-button:hover{ transform: scale(1.1); box-shadow:0 3px 8px rgba(0,0,0,0.3); }
+.play-button.spotify { background-image:url('spotify.png'); }
+.play-button.yt      { background-image:url('yt-music.png'); }
+.play-button.apple   { background-image:url('apple-music.png'); }
 
-/* ==== Mobile ==== */
-@media (max-width: 640px){
-  .panel {
-    width: 100vw;
-    left: 0;
-    right: 0;
-    border-radius: 0;
-  }
-  .album { width: 160px; height: 160px; }
-}
-
-/* Küçük ekran için kartları akışa bırak (önceki sabit 160px'i ezer) */
-@media (max-width: 480px) {
-  .album {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 1 / 1;
-    max-width: none;
-  }
-}
-
-.album.pulse{ outline: 2px solid rgba(255,255,255,.4); outline-offset: 2px; transition: outline-color .6s; }
-
-/* --- Scroll-down arrow bob animation --- */
-.scroll-down svg {
-  animation: bob 1.8s ease-in-out infinite;
-}
-@keyframes bob {
-  0%   { transform: translateY(0); }
-  50%  { transform: translateY(6px); }
-  100% { transform: translateY(0); }
-}
-
-/* --- Scroll-down: robust centering & smoother entrance --- */
-.scroll-down{
-  position: absolute;
-  bottom: 40px;
-  left: 50%;
-  transform: translateX(-50%);
-  transition: opacity 0.5s ease;
-  z-index: 3; }
-
-.scroll-down .scroll-down-inner{
-  display: inline-block;
-  opacity: 0;
-  transform: translateY(20px);
-  animation: fadeUp 0.9s ease forwards;
-  animation-delay: .8s; /* h1 (0s) -> p (.6s) -> arrow (.8s) */
-  will-change: transform, opacity;
-}
-
-.scroll-down .scroll-down-inner svg{
-  width: 40px;
-  height: 40px;
-  animation: bob 1.8s ease-in-out infinite;
-  animation-delay: 1.2s; /* bob, fadeUp bittikten sonra başlasın */
-}
-
-.meta-line { margin:4px 0 8px; font-size:0.9rem; opacity:0.7; }
-
-/* Panel header layout: left column (title + year), close on right */
-.panel header .head-left { display:flex; flex-direction:column; gap:2px; min-width:0; }
-.panel header h3 { margin:0; line-height:1.2; }
-/* Header year line (under title, flush-left) */
-.panel header .meta-line{
-  margin: 2px 0 0 0;
-  padding: 0;
-  font-size: .9rem;
-  color: rgba(255,255,255,.7);
-}
-
-.scroll-down.faded { opacity: 0 !important; pointer-events: none; }
-
-/* Panel sürükleme (drag) sırasında animasyonu kapat */
-.panel.dragging { transition: none !important; }
-
-/* Yalnızca hassas işaretleyicili cihazlarda (mouse) göster */
-@media (pointer: fine) {
-  /* Sistem imlecini gizle (metin alanlarında geri getireceğiz) */
+/* =========================================================
+   Custom cursor (sadece pointer:fine)
+========================================================= */
+@media (pointer: fine){
   body.cursor-hide { cursor: none; }
-
-  /* Metin alanlarında sistem imleci kalsın */
   input, textarea, select, [contenteditable="true"] { cursor: text; }
 
-  /* Özel imleç çekirdeği */
-  #cursor {
-    position: fixed;
-    top: 0; left: 0;
-    width: 18px; height: 18px;
-    border: 2px solid rgba(255,255,255,.9);
-    border-radius: 50%;
-    pointer-events: none;
-    transform: translate3d(-50%, -50%, 0);
+  #cursor{
+    position: fixed; top:0; left:0; width:18px; height:18px;
+    border:2px solid rgba(255,255,255,.9); border-radius:50%;
+    pointer-events:none; transform: translate3d(-50%, -50%, 0);
     transition: width .18s ease, height .18s ease, border-color .18s ease, background-color .18s ease, opacity .18s ease;
-    opacity: 0; /* sayfa içine girince görünür olacak */
-    z-index: 9999;
-    will-change: transform;
-    mix-blend-mode: difference; /* koyu/açık zeminde görünürlüğü artırır */
-    /* Karışım modunu istemezseniz kaldırın */
+    opacity:0; z-index:9999; will-change: transform; mix-blend-mode:difference;
   }
+  #cursor.is-hover{ width:36px; height:36px; background-color: rgba(255,255,255,.08); border-color:#fff; }
+  #cursor.is-down{ width:14px; height:14px; background-color: rgba(255,255,255,.2); }
+  #cursor.is-visible{ opacity:1; }  #cursor.is-hidden{ opacity:0; }
 
-  /* Hover’da büyüme (tıklanabilir öğeler) */
-  #cursor.is-hover {
-    width: 36px; height: 36px;
-    background-color: rgba(255,255,255,.08);
-    border-color: rgba(255,255,255,1);
-  }
-
-  /* Basılıyken ufak daralma */
-  #cursor.is-down {
-    width: 14px; height: 14px;
-    background-color: rgba(255,255,255,.2);
-  }
-
-  /* Görünür/ gizli durumları */
-  #cursor.is-visible { opacity: 1; }
-  #cursor.is-hidden  { opacity: 0; }
-}
-
-/* === Custom cursor için kesin gizleme — en SONA koyun === */
-@media (pointer: fine) {
-  /* Varsayılan gizleme */
+  /* Varsayılan gizleme: tüm clickable’lar inherit */
   html, body { cursor: none !important; }
-
-  /* Body'de cursor-hide sınıfı varken her yerde gizle,
-     SADECE metin alanlarında text imleci göster */
-  body.cursor-hide *:not(input):not(textarea):not(select):not([contenteditable="true"]) {
-    cursor: none !important;
-  }
-  input, textarea, select, [contenteditable="true"] {
-    cursor: text !important;
-  }
-
-  /* Tıklanabilirlerin UA/tema pointer'ını devre dışı bırak */
-  a, button, .play-button, .album, .album-overlay button, #panel, #panel * {
-    cursor: inherit !important;   /* parent’tan devral: none */
-  }
-
-  /* SVG içinde tanımlı cursor stillerini de bastır */
+  body.cursor-hide *:not(input):not(textarea):not(select):not([contenteditable="true"]) { cursor: none !important; }
+  a, button, .play-button, .album, .album-overlay button, #panel, #panel * { cursor: inherit !important; }
   svg, svg * { cursor: inherit !important; }
-}
 
-/* === Crosshair cursor (yalnız desktop) === */
-@media (pointer: fine) {
-  /* Varsayılan custom cursor ayarlarınız korunur; sadece .is-aim halinde hedef görünümü veriyoruz */
-  #cursor.is-aim {
-    width: 22px; height: 22px;
-    border: none;                       /* halka sınırını gizle */
+  /* Crosshair modu */
+  #cursor.is-aim{
+    width:22px; height:22px; border:none;
     background:
-      linear-gradient(currentColor, currentColor) center / 2px 100% no-repeat,  /* dikey çizgi */
-      linear-gradient(currentColor, currentColor) center / 100% 2px no-repeat;  /* yatay çizgi */
-    color: #fff;
-    opacity: 1;
+      linear-gradient(currentColor,currentColor) center / 2px 100% no-repeat,
+      linear-gradient(currentColor,currentColor) center / 100% 2px no-repeat;
+    color:#fff; opacity:1;
   }
-
-  /* İsteğe bağlı: hedef modunda hafif merkez noktası */
-  #cursor.is-aim::after {
-    content: "";
-    position: absolute;
-    inset: 50%;
-    width: 4px; height: 4px;
-    transform: translate(-50%, -50%);
-    background: currentColor;
-    border-radius: 50%;
+  #cursor.is-aim::after{
+    content:""; position:absolute; inset:50%;
+    width:4px; height:4px; transform:translate(-50%,-50%); background:currentColor; border-radius:50%;
   }
 }
 
-/* === Albüm köşe hedef çizgileri === */
-.album {
-  --aim-corner: 16px;  /* köşe uzunluğu */
-  --aim-thick: 2px;    /* çizgi kalınlığı */
+/* =========================================================
+   Aim corner çerçevesi (album hedef görünümü)
+========================================================= */
+.album{
+  --aim-corner: 16px;
+  --aim-thick: 2px;
   --aim-color: rgba(255,255,255,.9);
-  position: relative;
+}
+.album.is-aim::before{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background:
+    linear-gradient(var(--aim-color),var(--aim-color)) top left / var(--aim-corner) var(--aim-thick) no-repeat,
+    linear-gradient(var(--aim-color),var(--aim-color)) top left / var(--aim-thick) var(--aim-corner) no-repeat,
+    linear-gradient(var(--aim-color),var(--aim-color)) top right / var(--aim-corner) var(--aim-thick) no-repeat,
+    linear-gradient(var(--aim-color),var(--aim-color)) top right / var(--aim-thick) var(--aim-corner) no-repeat,
+    linear-gradient(var(--aim-color),var(--aim-color)) bottom left / var(--aim-corner) var(--aim-thick) no-repeat,
+    linear-gradient(var(--aim-color),var(--aim-color)) bottom left / var(--aim-thick) var(--aim-corner) no-repeat,
+    linear-gradient(var(--aim-color),var(--aim-color)) bottom right / var(--aim-corner) var(--aim-thick) no-repeat,
+    linear-gradient(var(--aim-color),var(--aim-color)) bottom right / var(--aim-thick) var(--aim-corner) no-repeat;
+  opacity:0; transform: scale(.98); transition: opacity .18s ease, transform .18s ease;
 }
 
-.album.is-aim::before {
+/* =========================================================
+   Misc
+========================================================= */
+#side-panel { background: transparent; transition: background .4s ease; }
+.meta-line { margin:4px 0 8px; font-size:.9rem; opacity:.7; }
+.panel header .head-left{ display:flex; flex-direction:column; gap:2px; min-width:0; }
+.panel header h3{ margin:0; line-height:1.2; }
+.panel header .meta-line{ margin:2px 0 0 0; padding:0; font-size:.9rem; color:rgba(255,255,255,.7); }
+.album.pulse{ outline:2px solid rgba(255,255,255,.4); outline-offset:2px; transition: outline-color .6s; }
+
+.panel::before {
   content: "";
   position: absolute;
   inset: 0;
+  background: rgba(0,0,0,0.25);
   pointer-events: none;
-  /* 8 adet min-şerit ile 4 köşeyi çiziyoruz */
-  background:
-    /* Sol üst */
-    linear-gradient(var(--aim-color), var(--aim-color)) top   left  / var(--aim-corner) var(--aim-thick) no-repeat,
-    linear-gradient(var(--aim-color), var(--aim-color)) top   left  / var(--aim-thick) var(--aim-corner) no-repeat,
-    /* Sağ üst */
-    linear-gradient(var(--aim-color), var(--aim-color)) top   right / var(--aim-corner) var(--aim-thick) no-repeat,
-    linear-gradient(var(--aim-color), var(--aim-color)) top   right / var(--aim-thick) var(--aim-corner) no-repeat,
-    /* Sol alt */
-    linear-gradient(var(--aim-color), var(--aim-color)) bottom left  / var(--aim-corner) var(--aim-thick) no-repeat,
-    linear-gradient(var(--aim-color), var(--aim-color)) bottom left  / var(--aim-thick) var(--aim-corner) no-repeat,
-    /* Sağ alt */
-    linear-gradient(var(--aim-color), var(--aim-color)) bottom right / var(--aim-corner) var(--aim-thick) no-repeat,
-    linear-gradient(var(--aim-color), var(--aim-color)) bottom right / var(--aim-thick) var(--aim-corner) no-repeat;
-  opacity: 0;
-  transform: scale(.98);
-  transition: opacity .18s ease, transform .18s ease;
+  border-radius: inherit;
+  z-index: 1;
 }
-
-.album.is-aim::before { opacity: 1; transform: scale(1); }
-
-/* İsteğe bağlı: hedef modunda kapak hafif sakinleşsin */
-.album.is-aim img { transform: scale(1.06); }
