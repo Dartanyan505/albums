@@ -1085,5 +1085,4 @@ async function init() {
   window.addEventListener("resize", computeParams, { passive: true });
 }
 
-
 window.addEventListener('DOMContentLoaded', init);
