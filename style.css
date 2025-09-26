@@ -358,3 +358,5 @@ body::-webkit-scrollbar{ display:none; }
   from { opacity: 0; }
   to   { opacity: 1; }
 }
+
+body.no-scroll { overscroll-behavior: none; }
