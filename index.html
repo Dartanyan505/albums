@@ -9,25 +9,29 @@
 </head>
 <body>
 
-  <!-- Hero -->
-  <header id="siteHeader" class="hero">
-    <div class="hero-inner">
-      <h1>Dinlediklerimden Öneriler</h1>
-      <p>Sizler için seçtiğim leziz albümler.</p>
-    </div>
+<!-- Hero -->
+<header id="siteHeader" class="hero">
+  <div class="hero-inner">
+    <h1>Dinlediklerimden Öneriler</h1>
+    <p>Sizler için seçtiğim leziz albümler.</p>
 
-    <!-- Aşağı ok -->
-    <div class="scroll-down">
-      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" 
-           viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-              d="M19 9l-7 7-7-7"/>
-      </svg>
-    </div>
+    <!-- Grid/Float geçiş butonu -->
+    <button id="toggleLayout" class="layout-btn">Grid / Float</button>
+  </div>
 
-    <!-- Renkli çizgi -->
-    <div class="hero-line"></div>
-  </header>
+  <!-- Aşağı ok -->
+  <div class="scroll-down">
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" 
+         viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+            d="M19 9l-7 7-7-7"/>
+    </svg>
+  </div>
+
+  <!-- Renkli çizgi -->
+  <div class="hero-line"></div>
+</header>
+
 
   <!-- Loader -->
 <div id="loader">
@@ -48,14 +52,19 @@
 
   <!-- Panel -->
   <div id="panelOverlay"></div>
-  <aside id="panel" class="panel">
-    <header>
-      <h3 id="panelTitle"></h3>
-      <button id="panelClose">&times;</button>
-    </header>
-    <div id="panelContent"><img id="panelCover" class="album-cover" alt="" loading="lazy" decoding="async" style="display:none"/>
-</div>
-  </aside>
+<aside id="panel" class="panel">
+  <!-- Drag handle üstte, header'ın dışında -->
+  <div class="drag-handle"></div>
+
+  <header>
+    <h3 id="panelTitle"></h3>
+    <button id="panelClose">&times;</button>
+  </header>
+  <div id="panelContent">
+    <img id="panelCover" class="album-cover" alt="" loading="lazy" decoding="async" style="display:none"/>
+  </div>
+</aside>
+
 
   <!-- Özel imleç -->
   <div id="cursor" aria-hidden="true"></div>

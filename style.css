@@ -410,3 +410,207 @@ body {
   scrollbar-width: none; /* Firefox */
 }
 body::-webkit-scrollbar { display: none; }
+
+@media (max-width: 767px){
+  .panel{
+    transition: transform 0.25s ease; /* ekleme */
+  }
+  .panel.open{ transform: translateY(0); }
+}
+
+.layout-btn {
+  position: fixed;
+  bottom: 20px; right: 20px;
+  z-index: 6000;
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: none;
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition: background .2s ease;
+  pointer-events: auto !important;
+}
+.layout-btn:hover {
+  background: rgba(255,255,255,0.25);
+}
+
+#stage.grid-mode {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--size), 1fr));
+  gap: 20px;
+  justify-items: center;
+  align-items: start;
+  position: static !important;   /* 🔑 relative yerine static */
+  min-height: auto !important;  /* 🔑 grid kendi yüksekliğini alsın */
+}
+
+#stage.grid-mode .album {
+  position: static !important;
+  width: var(--size) !important;
+  height: var(--size) !important;
+  transform: none !important;
+  opacity: 1 !important;
+}
+
+/* Grid mode animasyon */
+#stage.grid-mode .album {
+  animation: gridFadeIn 0.4s ease forwards;
+}
+
+@keyframes gridFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+#stage.grid-mode {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--size), 1fr));
+  gap: 20px;
+  justify-content: center;
+  justify-items: start;
+  align-items: start;
+  position: relative !important; /* static değil */
+  min-height: auto !important;
+}
+
+#stage.grid-mode .label { display: none !important; }
+
+.layout-btn {
+  position: static;       /* absolute yerine normal akışta kalsın */
+  display: inline-block;  /* yazının altında düzgün hizalansın */
+  margin-top: 12px;       /* yazı ile arasında boşluk */
+  padding: 8px 16px;
+  border: 1px solid #fff;
+  border-radius: 8px;
+  background: transparent;
+  color: #fff;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.layout-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.album {
+  position: absolute;
+  width: var(--size);
+  height: var(--size);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  opacity: 0;
+  transform: scale(0.95);
+  transition: left .8s ease, top .8s ease,
+              transform .5s ease, opacity .5s ease; /* 👈 buraya */
+  will-change: transform, top, left;
+  user-select: none; 
+  z-index: 2;
+}
+
+/* Drag handle sadece mobilde görünsün */
+.drag-handle {
+  display: none; /* varsayılan olarak gizle */
+}
+
+@media (max-width: 767px) {
+  .drag-handle {
+    display: block;
+    width: 40px;
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(255,255,255,0.4);
+    margin: 6px auto 10px;
+    cursor: grab;
+  }
+
+  .drag-handle:active {
+    cursor: grabbing;
+  }
+}
+.drag-handle {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .drag-handle {
+    display: block;
+    width: 40px;
+    height: 5px;
+    border-radius: 3px;
+    background: rgba(255,255,255,0.45);
+    margin: 8px auto;
+    cursor: grab;
+  }
+  .drag-handle:active {
+    cursor: grabbing;
+  }
+}
+
+/* Panel başlık ve yıl hizalama */
+#panel header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+#panelTitle {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.2;
+}
+
+#panelMetaLine {
+  margin-top: 2px !important;   /* çok küçük mesafe */
+  font-size: 0.85rem;
+  opacity: 0.7;
+  line-height: 1.1;
+}
+
+.panel header {
+  position: relative;              /* 🔑 tuşu absolute konumlayabilmek için */
+  display: block;                  /* flex yerine block */
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+/* Başlık + tarih hizalama */
+#panelTitle {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.3;
+  font-weight: 600;
+  padding-right: 40px;             /* 🔑 sağda çarpı için boşluk bırak */
+}
+
+#panelMetaLine {
+  margin-top: 2px;
+  font-size: 0.85rem;
+  opacity: 0.7;
+  line-height: 1.2;
+}
+
+/* Çarpı tuşu sağ üstte sabit */
+#panelClose {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  background: none;
+  border: none;
+  font-size: 22px;
+  color: #fff;
+  cursor: pointer;
+  line-height: 1;
+}
