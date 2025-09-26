@@ -394,68 +394,127 @@ async function init() {
   });
 
   /* === Mobilde paneli sürükleyerek kapatma (iOS-vari) — geri eklendi === */
-  if (window.matchMedia("(max-width: 767px)").matches) {
-    let startY = 0, currentY = 0, dragging = false, startedAtTop = false;
+  /* === Mobilde paneli sürükleyerek kapatma (modern overlay) === */
+if (window.matchMedia("(max-width: 767px)").matches) {
+  let startY = 0, currentY = 0, dragging = false, startedAtTop = false;
 
-    const OPEN_Y = 0;
-    const panelContentEl = document.getElementById("panelContent");
-    const panelHeader  = document.querySelector("#panel header");
-    const dragHandle   = document.querySelector(".drag-handle");
+  const OPEN_Y = 0;
+  const MAX_BLUR_PX = 6; // overlay blur maksimumu
+  const panelContentEl = document.getElementById("panelContent");
+  const panelHeader  = document.querySelector("#panel header");
+  const dragHandle   = document.querySelector(".drag-handle");
+  const overlayEl    = document.getElementById("panelOverlay");
 
-    function onStart(e){
-      const target = e.target;
-      const isHeaderDrag = panelHeader.contains(target) || dragHandle?.contains(target);
-      startedAtTop = isHeaderDrag || (panelContentEl.scrollTop <= 0);
-      if (!startedAtTop) return;
-
-      dragging = true;
-      startY = e.touches[0].clientY;
-      currentY = startY;
-      panel.style.transition = "none";
-    }
-
-    function onMove(e){
-      if (!dragging || !startedAtTop) return;
-      currentY = e.touches[0].clientY;
-      let deltaY = currentY - startY;
-      if (deltaY < 0) deltaY = 0;
-      panel.style.transform = `translateY(${deltaY}px)`;
-    }
-
-    function finishDrag(shouldClose){
-      panel.style.transition = "transform 0.25s ease";
-      if (shouldClose) {
-        panel.style.transform = "translateY(100%)";
-        const done = () => {
-          panel.removeEventListener("transitionend", done);
-          closePanel();
-        };
-        panel.addEventListener("transitionend", done, { once: true });
-      } else {
-        panel.style.transform = `translateY(${OPEN_Y}px)`;
-        const back = () => {
-          panel.removeEventListener("transitionend", back);
-          panel.style.transform = "";
-          panel.style.transition = "";
-        };
-        panel.addEventListener("transitionend", back, { once: true });
-      }
-    }
-
-    function onEnd(){
-      if (!dragging || !startedAtTop) return;
-      dragging = false;
-      const deltaY = Math.max(0, currentY - startY);
-      const h = panel.getBoundingClientRect().height;
-      const threshold = Math.min(160, h * 0.22);
-      finishDrag(deltaY > threshold);
-    }
-
-    panel.addEventListener("touchstart", onStart, { passive: true });
-    panel.addEventListener("touchmove",  onMove,  { passive: true });
-    panel.addEventListener("touchend",   onEnd,   { passive: true });
-    panel.addEventListener("touchcancel",onEnd,   { passive: true });
+  function setOverlayProgress(p){ // 0..1 (1 = tamamen aşağı çekilmiş)
+    const inv = Math.max(0, 1 - p);
+    // opaklığı çok kesmeyelim; 0.1 taban kalsın → daha “premium” durur
+    overlayEl.style.opacity = (0.1 + 0.9 * inv).toString();
+    const blur = (MAX_BLUR_PX * inv);
+    overlayEl.style.backdropFilter = `blur(${blur}px)`;
+    overlayEl.style.webkitBackdropFilter = `blur(${blur}px)`;
   }
+
+  function onStart(e){
+    const target = e.target;
+    const isHeaderDrag = panelHeader.contains(target) || dragHandle?.contains(target);
+
+    // İçerik en üstteyse ya da header/handle’dan başladıysa sürüklemeye izin ver
+    startedAtTop = isHeaderDrag || (panelContentEl.scrollTop <= 0);
+    if (!startedAtTop) return;
+
+    dragging = true;
+    startY = e.touches[0].clientY;
+    currentY = startY;
+
+    // Animasyonları kaldır, direkt takip etsin
+    panel.style.transition = "none";
+    overlayEl.style.transition = "none";
+
+    // Drag başlarken overlay tam aktif kalsın
+    setOverlayProgress(0);
+
+    document.body.classList.add("panel-dragging");
+  }
+
+  function onMove(e){
+    if (!dragging || !startedAtTop) return;
+    currentY = e.touches[0].clientY;
+    let deltaY = currentY - startY;
+    if (deltaY < 0) deltaY = 0;
+
+    panel.style.transform = `translateY(${deltaY}px)`;
+
+    // İlerlemeye göre overlay’i canlı güncelle
+    const h = panel.getBoundingClientRect().height;
+    const threshold = h * 0.65;
+    const p = Math.min(1, deltaY / threshold);
+    setOverlayProgress(p);
+  }
+
+  function finishDrag(shouldClose){
+    // Geçişleri geri aç
+    panel.style.transition    = "transform 250ms ease";
+    overlayEl.style.transition = "opacity 250ms ease, backdrop-filter 250ms ease";
+
+    if (shouldClose) {
+      // Panel kapanırken overlay de akıcı şekilde sönsün
+      panel.style.transform = "translateY(100%)";
+      overlayEl.style.opacity = "0";
+      overlayEl.style.backdropFilter = "blur(0px)";
+      overlayEl.style.webkitBackdropFilter = "blur(0px)";
+
+      const done = () => {
+        panel.removeEventListener("transitionend", done);
+        // inline stilleri temizle
+        panel.style.transform   = "";
+        panel.style.transition  = "";
+        overlayEl.style.transition = "";
+        overlayEl.style.opacity = "";
+        overlayEl.style.backdropFilter = "";
+        overlayEl.style.webkitBackdropFilter = "";
+        document.body.classList.remove("panel-dragging");
+        closePanel();
+      };
+      panel.addEventListener("transitionend", done, { once: true });
+
+    } else {
+      // Kapatma eşiğini geçmediyse geri eski haline dönsün
+      panel.style.transform = `translateY(${OPEN_Y}px)`;
+      overlayEl.style.opacity = "1";
+      overlayEl.style.backdropFilter = `blur(${MAX_BLUR_PX}px)`;
+      overlayEl.style.webkitBackdropFilter = `blur(${MAX_BLUR_PX}px)`;
+
+      const back = () => {
+        panel.removeEventListener("transitionend", back);
+        // inline stilleri temizle
+        panel.style.transform   = "";
+        panel.style.transition  = "";
+        overlayEl.style.transition = "";
+        overlayEl.style.opacity = "";
+        overlayEl.style.backdropFilter = "";
+        overlayEl.style.webkitBackdropFilter = "";
+        document.body.classList.remove("panel-dragging");
+      };
+      panel.addEventListener("transitionend", back, { once: true });
+    }
+  }
+
+  function onEnd(){
+    if (!dragging || !startedAtTop) return;
+    dragging = false;
+
+    const deltaY = Math.max(0, currentY - startY);
+    const h = panel.getBoundingClientRect().height;
+    const threshold = Math.min(160, h * 0.27);
+
+    finishDrag(deltaY > threshold);
+  }
+
+  panel.addEventListener("touchstart", onStart,   { passive: true });
+  panel.addEventListener("touchmove",  onMove,    { passive: true });
+  panel.addEventListener("touchend",   onEnd,     { passive: true });
+  panel.addEventListener("touchcancel",onEnd,     { passive: true });
+}
 
   // Mobilde panel açıkken pull-to-refresh’i engelle
   document.addEventListener('touchmove', (e) => {
@@ -552,6 +611,54 @@ async function init() {
   // Deep-link desteği
   window.addEventListener("hashchange", ()=>openFromHash(albumIndex), { passive: true });
   openFromHash(albumIndex);
+
+  function enableKeyboardNavigation() {
+  const cards = () => [...document.querySelectorAll(".album")];
+  
+  document.addEventListener("keydown", (e) => {
+    const focusEl = document.activeElement;
+    if (!focusEl.classList.contains("album")) return;
+
+    const list = cards();
+    const index = list.indexOf(focusEl);
+    if (index === -1) return;
+
+    // Grid sütun sayısını hesapla
+    const grid = document.getElementById("stage");
+    const style = window.getComputedStyle(grid);
+    const cols = style.gridTemplateColumns.split(" ").length;
+
+    let nextIndex = null;
+    switch (e.key) {
+      case "ArrowRight":
+        nextIndex = index + 1;
+        break;
+      case "ArrowLeft":
+        nextIndex = index - 1;
+        break;
+      case "ArrowDown":
+        nextIndex = index + cols;
+        break;
+      case "ArrowUp":
+        nextIndex = index - cols;
+        break;
+      case "Enter":
+      case " ":
+        focusEl.click();
+        e.preventDefault();
+        return;
+      case "Escape":
+        closePanel();
+        return;
+    }
+
+    if (nextIndex !== null && list[nextIndex]) {
+      e.preventDefault();
+      list[nextIndex].focus();
+    }
+  });
+}
+  enableKeyboardNavigation();
 }
 
 window.addEventListener('DOMContentLoaded', init);

@@ -117,12 +117,13 @@ body{
 #stage{
   width:100%; min-height:100vh; padding:40px 16px;
 }
-#stage.grid-mode{
-  display:grid;
+#stage.grid-mode {
+  display: grid;
   grid-template-columns: repeat(auto-fit, minmax(var(--size), 1fr));
-  gap:20px;
-  justify-items:center;
-  align-items:start;
+  gap: calc(var(--size) * 0.08);  /* albüm boyutunun %8’i kadar boşluk */
+  justify-content: center;
+  justify-items: center; /* daha dengeli hizalanır */
+  align-items: start;
 }
 
 /* =========================================================
@@ -247,8 +248,8 @@ body{
   opacity:0; visibility:hidden; transition:opacity .3s ease; z-index:4999;
   backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
 }
-@media (max-width:767px){ #panelOverlay.open{ opacity:1; visibility:visible; } }
-@media (min-width:768px){ #panelOverlay{ display:none !important; } }
+@media (max-width:767px){ #panelOverlay.open{ opacity:1; visibility:visible; transition:opacity .3s ease;} }
+@media (min-width:768px){ #panelOverlay{ display:none !important; transition:opacity .3s ease;} }
 
 /* Panel scrollbars gizle */
 #panel, #panelContent{ overflow:auto; -ms-overflow-style:none; scrollbar-width:none; }
@@ -360,3 +361,29 @@ body::-webkit-scrollbar{ display:none; }
 }
 
 body.no-scroll { overscroll-behavior: none; }
+
+/* Overlay’i yumuşat: opacity + blur birlikte geçişsin */
+#panelOverlay{
+  transition: opacity 250ms ease, backdrop-filter 250ms ease;
+  will-change: opacity, backdrop-filter;
+}
+
+@media (min-width: 768px) {
+  .panel {
+    backdrop-filter: blur(12px);          /* 🔑 PC’de blur */
+    -webkit-backdrop-filter: blur(12px);  /* Safari desteği */
+  }
+}
+
+/* PC hover efekti: kapak zoom + shadow */
+@media (pointer: fine) {
+  .album img {
+    transition: transform 0.35s ease;
+  }
+  .album:hover img {
+    transform: scale(1.08);
+  }
+  .album:hover {
+    box-shadow: 0 10px 28px rgba(0,0,0,0.55);
+  }
+}
