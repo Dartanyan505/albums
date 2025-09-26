@@ -318,11 +318,60 @@ function openFromHash(albumIndex){
   openPanelFromData(data, card || null);
 }
 
+// === Aşağı ok intro: çizgi aktifse/scroll varsa asla çalışmasın ===
+function setupArrowIntro({ delay = 600, scrollThreshold = 16 } = {}) {
+  const arrowEl = document.querySelector('#siteHeader .scroll-down');
+  const lineEl  = document.querySelector('#siteHeader .hero-line');
+  if (!arrowEl || !lineEl) return;
+
+  // zaten scroll olduysa ya da çizgi aktifse intro planlama
+  if (window.scrollY >= scrollThreshold || lineEl.classList.contains('active')) return;
+
+  let cancelled = false;
+  let timer = null;
+  let mo = null;
+
+  const cancel = () => {
+    if (cancelled) return;
+    cancelled = true;
+    if (timer) clearTimeout(timer);
+    mo?.disconnect?.();
+    window.removeEventListener('scroll', onScroll);
+    arrowEl.classList.remove('intro');
+  };
+
+  function onScroll() {
+    if (window.scrollY >= scrollThreshold) cancel();
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  // Çizgi class'ı değişirse anında iptal
+  mo = new MutationObserver(() => {
+    if (lineEl.classList.contains('active')) cancel();
+  });
+  mo.observe(lineEl, { attributes: true, attributeFilter: ['class'] });
+
+  // Gecikmeden sonra son kez kontrol edip fade başlat
+  timer = setTimeout(() => {
+    if (cancelled) return;
+    if (window.scrollY >= scrollThreshold || lineEl.classList.contains('active')) {
+      cancel(); return;
+    }
+    arrowEl.classList.add('intro');
+    arrowEl.addEventListener('animationend', () => {
+      // animasyon biter bitmez izleyicileri kapat
+      arrowEl.classList.remove('intro');
+      cancel();
+    }, { once: true });
+  }, delay);
+}
+
 /* =============================
    Boot (Grid only)
 ============================= */
 async function init() {
   ensureScrollArrow(0.60);
+  setupArrowIntro();
 
   stage        = document.getElementById("stage");
   panel        = document.getElementById("panel");
@@ -407,6 +456,13 @@ async function init() {
     panel.addEventListener("touchend",   onEnd,   { passive: true });
     panel.addEventListener("touchcancel",onEnd,   { passive: true });
   }
+
+  // Mobilde panel açıkken pull-to-refresh’i engelle
+  document.addEventListener('touchmove', (e) => {
+    if (document.body.classList.contains('no-scroll')) {
+      e.preventDefault();
+    }
+  }, { passive: false });
 
   // JSON yükle
   const res = await fetch("albums.json");
