@@ -460,6 +460,12 @@ async function init() {
   // Mobilde panel açıkken pull-to-refresh’i engelle
   document.addEventListener('touchmove', (e) => {
     if (document.body.classList.contains('no-scroll')) {
+      const panelContent = document.getElementById('panelContent');
+      // e.target panelin içindeyse (veya onun çocuklarından birindeyse) kaydırmaya izin ver
+      if (panelContent && panelContent.contains(e.target)) {
+        return;
+      }
+      // aksi halde pull-to-refresh’i engelle
       e.preventDefault();
     }
   }, { passive: false });
