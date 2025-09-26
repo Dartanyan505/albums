@@ -1,75 +1,88 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Albüm Koleksiyonum</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.2/color-thief.umd.js"></script>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- ColorThief (kapaktan panel rengi çıkarma) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.2/color-thief.umd.js" defer></script>
+
+  <!-- Meta -->
+  <meta name="theme-color" content="#0a0a0a" />
+  <meta name="description" content="Dinlediklerimden seçtiğim albümler — grid görünüm." />
 </head>
 <body>
 
-<!-- Hero -->
-<header id="siteHeader" class="hero">
-  <div class="hero-inner">
-    <h1>Dinlediklerimden Öneriler</h1>
-    <p>Sizler için seçtiğim leziz albümler.</p>
-
-    <!-- Grid/Float geçiş butonu -->
-    <button id="toggleLayout" class="layout-btn">Grid / Float</button>
+  <!-- Arka plan katmanı (CSS’de .bg-layer ve .bg-circle varsa görsel efekt çalışır) -->
+  <div class="bg-layer" aria-hidden="true">
+    <div class="bg-circle c1"></div>
+    <div class="bg-circle c2"></div>
+    <div class="bg-circle c3"></div>
   </div>
 
-  <!-- Aşağı ok -->
-  <div class="scroll-down">
-    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" 
-         viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-            d="M19 9l-7 7-7-7"/>
-    </svg>
+  <!-- Hero -->
+  <header id="siteHeader" class="hero">
+    <div class="hero-inner">
+      <h1>Dinlediklerimden Öneriler</h1>
+      <p>Sizler için seçtiğim leziz albümler.</p>
+      <!-- Toggle butonu artık yok -->
+    </div>
+
+    <!-- Aşağı ok -->
+    <div class="scroll-down" aria-hidden="false" role="button" tabindex="0" title="Aşağı kaydır">
+      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none"
+           viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M19 9l-7 7-7-7"/>
+      </svg>
+    </div>
+
+    <!-- Renkli çizgi -->
+    <div class="hero-line"></div>
+  </header>
+
+  <!-- Loader (kapaklar gelirken minik vitrin) -->
+  <div id="loader" aria-live="polite">
+    <div id="loader-stage"></div>
   </div>
-
-  <!-- Renkli çizgi -->
-  <div class="hero-line"></div>
-</header>
-
-
-  <!-- Loader -->
-<div id="loader">
-  <div id="loader-stage"></div>
-</div>
-
-<!-- Albüm sahnesi -->
-
-
-<!-- Panel -->
-
-
 
   <!-- Albüm grid sahnesi -->
-  <main id="stage">
-    <!-- Albümler JS ile buraya gelecek -->
+  <main id="stage" class="grid-root" aria-label="Albüm listesi">
+    <!-- Albümler JS ile burada oluşturulacak -->
   </main>
 
-  <!-- Panel -->
-  <div id="panelOverlay"></div>
-<aside id="panel" class="panel">
-  <!-- Drag handle üstte, header'ın dışında -->
-  <div class="drag-handle"></div>
+  <!-- Panel overlay -->
+  <div id="panelOverlay" class="panel-overlay" aria-hidden="true"></div>
 
-  <header>
-    <h3 id="panelTitle"></h3>
-    <button id="panelClose">&times;</button>
-  </header>
-  <div id="panelContent">
-    <img id="panelCover" class="album-cover" alt="" loading="lazy" decoding="async" style="display:none"/>
-  </div>
-</aside>
+  <!-- Detay paneli -->
+  <aside id="panel" class="panel" aria-hidden="true" aria-label="Albüm detay paneli">
+    <!-- Mobilde sürükleme tutacağı -->
+    <div class="drag-handle" aria-hidden="true"></div>
 
+    <header>
+      <h3 id="panelTitle"></h3>
+      <button id="panelClose" type="button" aria-label="Kapat">&times;</button>
+    </header>
 
-  <!-- Özel imleç -->
+    <div id="panelContent">
+      <img id="panelCover" class="album-cover" alt="" loading="lazy" decoding="async" style="display:none" />
+      <!-- Açıklama, parça listesi ve platform linkleri JS tarafından eklenecek -->
+    </div>
+  </aside>
+
+  <!-- Özel imleç (PC) -->
   <div id="cursor" aria-hidden="true"></div>
-  
-  <script src="main.js"></script>
 
+  <!-- Ana JS -->
+  <script src="main.js" defer></script>
+
+  <!-- Kısa noscript -->
+  <noscript>
+    Bu siteyi görüntülemek için JavaScript’i etkinleştirmen gerekiyor.
+  </noscript>
 </body>
 </html>
