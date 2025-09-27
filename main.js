@@ -249,21 +249,32 @@ function openPanelFromData(albumObj, cardEl){
 
   // === PAYLAŞ (PNG) — Tam panel + istenmeyen butonları çıkar, köşeleri keskin yap, numaraları güvenli yaz, alt yazı ekle ===
 
-  const shareBtn = document.getElementById("panelShare");
-  
+const shareBtn = document.getElementById("panelShare");
 if (shareBtn) {
   shareBtn.onclick = async () => {
     if (!albumObj) return;
 
-    const linkHref = `${location.origin}/#/${encodeURIComponent(albumObj.artist)}/${encodeURIComponent(albumObj.title)}`;
-    const shareText = `${albumObj.artist} – ${albumObj.title}${albumObj.year ? ` (${albumObj.year})` : ""}\n${linkHref}`;
+    const slugify = (s) => String(s)
+      .normalize('NFKD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .trim()
+      .replace(/&/g, '-and-')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+
+    const artistSlug = slugify(albumObj.artist);
+    const albumSlug  = slugify(albumObj.title);
+    const linkHref   = `${location.origin}/#/${artistSlug}/${albumSlug}`;
+
+    const shareText = `${albumObj.artist} – ${albumObj.title}${albumObj.year ? ` (${albumObj.year})` : ""}\n\n${linkHref}`;
 
     if (navigator.share) {
       try {
         await navigator.share({
           title: albumObj.title,
-          text: shareText,
-          url: linkHref   // 👈 bazı uygulamalar bu kısmı da dikkate alıyor
+          text: shareText
+          // url: linkHref  👈 kaldırdık
         });
       } catch (err) {
         console.warn("Paylaşım iptal:", err);
