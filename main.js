@@ -625,11 +625,11 @@ async function init() {
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        entry.target.classList.add("reveal");
+        entry.target.classList.add("show");
         observer.unobserve(entry.target);
       }
     });
-  }, { threshold: 1.0 });
+  }, { threshold: 0.35 });
 
   const albumIndex = new Map();
   const loader = document.getElementById("loader");
