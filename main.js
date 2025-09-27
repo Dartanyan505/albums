@@ -248,46 +248,102 @@ function openPanelFromData(albumObj, cardEl){
   if (window.innerWidth <= 640) document.body.classList.add("no-scroll");
 
   // === PAYLAŞ (PNG) — Tam panel + istenmeyen butonları çıkar, köşeleri keskin yap, numaraları güvenli yaz, alt yazı ekle ===
-
   const shareBtn = document.getElementById("panelShare");
   if (shareBtn) {
     shareBtn.onclick = async () => {
-      if (!albumObj) return;
+      const panelEl = document.getElementById("panel");
+      const contentEl = document.getElementById("panelContent");
+      if (!panelEl || !contentEl) return;
 
-      const slugify = (s) => String(s)
-        .normalize('NFKD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .toLowerCase()
-        .trim()
-        .replace(/&/g, '-and-')
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-+|-+$/g, '');
+      const panelRect = panelEl.getBoundingClientRect();
+      const panelWidthPx = `${Math.round(panelRect.width)}px`;
 
-      const artistSlug = slugify(albumObj.artist);
-      const albumSlug  = slugify(albumObj.title);
+      try {
+        const canvas = await html2canvas(panelEl, {
+          backgroundColor: "#0a0a0a",
+          scale: 2,
+          useCORS: true,
+          scrollX: 0,
+          scrollY: 0,
+          onclone: (doc) => {
+            const p = doc.getElementById("panel");
+            const c = doc.getElementById("panelContent");
 
-      // 🔗 GitHub Pages adresine uygun link
-      const linkHref = `${location.origin}${location.pathname}#/${artistSlug}/${albumSlug}`;
+            // — Paneli tam boy ve köşeli yap
+            if (p) {
+              p.style.position  = "static";
+              p.style.transform = "none";
+              p.style.height    = "auto";
+              p.style.maxHeight = "none";
+              p.style.width     = panelWidthPx;
+              p.style.boxShadow = "none";
+              p.style.borderRadius = "0";
+              p.style.borderTopLeftRadius  = "0";
+              p.style.borderTopRightRadius = "0";
+            }
+            if (c) {
+              c.style.height    = "auto";
+              c.style.maxHeight = "none";
+              c.style.overflow  = "visible";
+            }
 
-      // Mesaj metni
-      const shareText = `${albumObj.artist} – ${albumObj.title}${albumObj.year ? ` (${albumObj.year})` : ""}\n\n${linkHref}`;
+            // — Görselde istemediklerini kaldır
+            doc.getElementById("panelClose")?.remove();
+            doc.querySelector(".drag-handle")?.remove();
+            doc.querySelector(".play-buttons")?.remove();
+            doc.getElementById("panelOverlay")?.remove();
 
-      if (navigator.share) {
-        try {
-          await navigator.share({
-            title: albumObj.title,
-            text: shareText
-          });
-        } catch (err) {
-          console.warn("Paylaşım iptal:", err);
+            // — SAĞLAM SAYILANDIRMA: listelerde gerçek numara span'ı oluştur
+            doc.querySelectorAll("#panelContent ol").forEach((ol) => {
+              ol.style.listStyle = "none";
+              ol.style.margin = "0";
+              ol.style.padding = "0";
+
+              Array.from(ol.querySelectorAll("li")).forEach((li, idx) => {
+                // Li içeriğini iki sütuna böl: numara + metin
+                const num = doc.createElement("span");
+                num.textContent = `${idx + 1}.`;
+                Object.assign(num.style, {
+                  display: "inline-block",
+                  width: "2.2ch",
+                  textAlign: "right",
+                  marginRight: ".6ch",
+                  fontVariantNumeric: "tabular-nums",
+                  opacity: "0.9"
+                });
+
+                const text = doc.createElement("span");
+                text.innerHTML = li.innerHTML;
+
+                li.innerHTML = "";
+                Object.assign(li.style, {
+                  display: "flex",
+                  alignItems: "baseline",
+                  lineHeight: "1.35",
+                  margin: ".2rem 0"
+                });
+                li.appendChild(num);
+                li.appendChild(text);
+              });
+            });
+          },
+        });
+
+        const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/jpeg", 0.85));
+        if (!blob) return;
+
+        const file = new File([blob], "album.jpg", { type: "image/jpeg" });
+
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({ files: [file], title: "Albüm" });
+        } else {
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url; a.download = "album.jpg"; a.click();
+          URL.revokeObjectURL(url);
         }
-      } else {
-        try {
-          await navigator.clipboard.writeText(shareText);
-          alert("📋 Metin panoya kopyalandı.");
-        } catch (err) {
-          console.error("Panoya kopyalanamadı:", err);
-        }
+      } catch (err) {
+        console.error("Paylaşım hatası:", err);
       }
     };
   }
