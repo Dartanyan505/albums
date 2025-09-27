@@ -31,7 +31,7 @@ body{
 .bg-circle{
   position:absolute; border-radius:50%; opacity:.4;
   filter:blur(100px); /* optimize edildi */
-  animation:floaty 40s infinite alternate ease-in-out;
+  animation:floaty 15s infinite alternate ease-in-out;
   will-change: transform; /* GPU optimizasyonu */
 }
 .bg-circle.c1{
@@ -50,8 +50,10 @@ body{
 }
 @keyframes floaty{
   from{ transform:translate3d(0,0,0) scale(1); }
-  to  { transform:translate3d(60px,-80px,0) scale(1.2); }
+  50% { transform:translate3d(120px,-160px,0) scale(1.4) rotate(10deg); }
+  to  { transform:translate3d(-120px,120px,0) scale(1.2) rotate(-10deg); }
 }
+
 
 /* Hareket azaltma tercihi */
 @media (prefers-reduced-motion: reduce){
@@ -130,10 +132,12 @@ body{
 #stage.grid-mode {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(var(--size), 1fr));
-  gap: calc(var(--size) * 0.08);
+  column-gap: calc(var(--size) * 0.08); /* yatay */
+  row-gap: calc(var(--size) * 0.16);    /* dikey (yarıya indirdik) */
   justify-content: center;
   justify-items: center;
   align-items: start;
+  align-content: start; /* tüm satırı yukarı yapıştır */
 }
 
 /* =========================================================
