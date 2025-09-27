@@ -111,12 +111,12 @@ body{
   transform:skewX(-20deg); opacity:0;
 }
 .hero-line.active{ transform:translateX(-50%) scaleX(1); opacity:1; }
-.hero-line.active::after{ animation:shine 3s infinite; }
+.hero-line.active::after{ animation:shine 2s infinite; }
 
 @keyframes shine{
-  0%{ left:-50%; opacity:0; }
-  20%{ opacity:1; }
-  50%,100%{ left:120%; opacity:0; }
+  0%{ left:-40%; opacity:.6; }
+  50%{ left:110%; opacity:.35; }
+  100%{ left:110%; opacity:0; }
 }
 @keyframes fadeUp{ from{opacity:0; transform:translateY(20px);} to{opacity:1; transform:translateY(0);} }
 @keyframes bob{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(6px); } }
@@ -302,3 +302,6 @@ body.no-scroll { overscroll-behavior: none; }
   background-position: center;
   background-repeat: no-repeat;
 }
+
+/* Error message style */
+.error{ color:#fca5a5; margin:12px auto; text-align:center; font-size:.95rem; }

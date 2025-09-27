@@ -15,7 +15,8 @@ const PRECACHE_URLS = [
   './icons/spotify.png',
   './icons/yt-music.png',
   './icons/logo-192.png',
-  './icons/logo-512.png'
+  './icons/logo-512.png',
+  './icons/share.png'
 ];
 
 self.addEventListener('install', (event) => {
@@ -95,9 +96,11 @@ async function cacheFirst(request, cacheName) {
 async function staleWhileRevalidate(request, cacheName) {
   const cache = await caches.open(cacheName);
   const cached = await cache.match(request);
-  const networkPromise = fetch(request).then((res) => {
-    if (res && res.status === 200) cache.put(request, res.clone());
-    return res;
-  }).catch(() => null);
-  return cached || networkPromise || Response.error();
+  try {
+    const res = await fetch(request);
+    if (res && res.status === 200) await cache.put(request, res.clone());
+    return res || cached || Response.error();
+  } catch (_) {
+    return cached || Response.error();
+  }
 }

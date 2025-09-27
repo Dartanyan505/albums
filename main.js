@@ -213,9 +213,9 @@ function openPanelFromData(albumObj, cardEl){
 
   const extraHtml = `
     <div class="play-buttons">
-      <a href="${spotifyUrl}" target="_blank" class="play-button spotify" aria-label="Spotify"></a>
-      <a href="${ytmusicUrl}" target="_blank" class="play-button yt" aria-label="YouTube Music"></a>
-      <a href="${appleUrl}"   target="_blank" class="play-button apple" aria-label="Apple Music"></a>
+      <a href="${spotifyUrl}" target="_blank" rel="noopener noreferrer" class="play-button spotify" aria-label="Spotify"></a>
+      <a href="${ytmusicUrl}" target="_blank" rel="noopener noreferrer" class="play-button yt" aria-label="YouTube Music"></a>
+      <a href="${appleUrl}"   target="_blank" rel="noopener noreferrer" class="play-button apple" aria-label="Apple Music"></a>
       <button class="play-button share" id="panelShare" title="Paylaş"></button>
     </div>
     ${albumObj.desc ? `<h4 style="margin-top:16px;">Açıklama</h4><p>${albumObj.desc}</p>` : ""}
@@ -634,8 +634,31 @@ if (window.matchMedia("(max-width: 767px)").matches) {
   }, { passive: false });
 
   // JSON yükle
+  let albumsData = [];
+try {
   const res = await fetch("albums.json");
-  const albumsData = await res.json();
+  if (!res.ok) throw new Error(res.statusText);
+  albumsData = await res.json();
+} catch(err) {
+  console.error("albums.json yüklenemedi:", err);
+  document.getElementById("loader")?.insertAdjacentHTML("afterend", 
+    `<p class="error" role="alert">Albüm listesi yüklenemedi. Lütfen bağlantınızı kontrol edin.</p>`);
+}
+try {
+  if ("serviceWorker" in navigator) {
+    const urls = (albumsData || []).map(a => a.cover).filter(Boolean);
+    if (urls.length) {
+      if (navigator.serviceWorker.controller) {
+        navigator.serviceWorker.controller.postMessage({ type: "PRECACHE_COVERS", urls });
+      } else {
+        navigator.serviceWorker.addEventListener("controllerchange", () => {
+          navigator.serviceWorker.controller?.postMessage({ type: "PRECACHE_COVERS", urls });
+        }, { once: true });
+      }
+    }
+  }
+} catch(e) {}
+
 
   const albumIndex = new Map();
   const loader = document.getElementById("loader");
@@ -666,7 +689,7 @@ if (window.matchMedia("(max-width: 767px)").matches) {
     el.setAttribute("aria-label", `${d.artist} — ${d.title} albümünü aç`);
 
     el.innerHTML = `
-      <img src="${cover}" alt="${d.title}">
+      <img src="${cover}" alt="${d.title}" loading="lazy" decoding="async" width="220" height="220">
       <div class="overlay">
         <strong class="title">${d.title}</strong>
         <div class="artist">${d.artist}</div>
@@ -716,6 +739,18 @@ if (window.matchMedia("(max-width: 767px)").matches) {
   window.addEventListener("hashchange", ()=>openFromHash(albumIndex), { passive: true });
   openFromHash(albumIndex);
 
+  function getGridCols(){
+    const cards = [...document.querySelectorAll(".album")];
+    if (cards.length <= 1) return 1;
+    const firstTop = cards[0].offsetTop;
+    let cols = 0;
+    for (const el of cards) {
+      if (el.offsetTop !== firstTop) break;
+      cols++;
+    }
+    return cols || 1;
+  }
+
   function enableKeyboardNavigation() {
   const cards = () => [...document.querySelectorAll(".album")];
   
@@ -728,9 +763,7 @@ if (window.matchMedia("(max-width: 767px)").matches) {
     if (index === -1) return;
 
     // Grid sütun sayısını hesapla
-    const grid = document.getElementById("stage");
-    const style = window.getComputedStyle(grid);
-    const cols = style.gridTemplateColumns.split(" ").length;
+    const cols =  getGridCols();
 
     let nextIndex = null;
     switch (e.key) {
@@ -814,3 +847,10 @@ if (window.matchMedia("(max-width: 767px)").matches) {
 })();
 
 window.addEventListener('DOMContentLoaded', init);
+
+// --- Service Worker Register (PWA) ---
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js").catch(console.error);
+  });
+}
