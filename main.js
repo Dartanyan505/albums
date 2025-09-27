@@ -253,7 +253,7 @@ function openPanelFromData(albumObj, cardEl){
   if (shareBtn) {
     shareBtn.onclick = async () => {
       if (!albumObj) return;
-    
+
       const slugify = (s) => String(s)
         .normalize('NFKD')
         .replace(/[\u0300-\u036f]/g, '')
@@ -262,16 +262,16 @@ function openPanelFromData(albumObj, cardEl){
         .replace(/&/g, '-and-')
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/^-+|-+$/g, '');
-    
+
       const artistSlug = slugify(albumObj.artist);
       const albumSlug  = slugify(albumObj.title);
-    
+
       // 🔗 GitHub Pages adresine uygun link
-      const linkHref = `https://dartanyan505.github.io/albums/#/${artistSlug}/${albumSlug}`;
-    
+      const linkHref = `${location.origin}${location.pathname}#/${artistSlug}/${albumSlug}`;
+
       // Mesaj metni
       const shareText = `${albumObj.artist} – ${albumObj.title}${albumObj.year ? ` (${albumObj.year})` : ""}\n\n${linkHref}`;
-    
+
       if (navigator.share) {
         try {
           await navigator.share({
