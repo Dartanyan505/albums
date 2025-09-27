@@ -103,8 +103,10 @@ function applyPanelBackground(img, panelEl) {
    Custom Cursor (masaüstü) — opsiyonel
 ============================= */
 (function(){
-  const isDesktopPointer = window.matchMedia('(pointer: fine)').matches;
-  if (!isDesktopPointer) return;
+  // Masaüstü olmayan cihazlarda (touch) hiç çalışmasın
+  if (!window.matchMedia('(pointer: fine)').matches) {
+    return; 
+  }
 
   const cursor = document.getElementById('cursor');
   if (!cursor) return;
@@ -233,7 +235,6 @@ function openPanelFromData(albumObj, cardEl){
   const onReady = () => {
     skeleton?.remove();
     coverImg.style.display = "block";
-
   };
   if ("decode" in coverImg) {
     coverImg.decode().then(onReady).catch(() => coverImg.onload = onReady);
@@ -385,7 +386,7 @@ function ensureScrollArrow(threshold = 0.60){
   });
 
   let lastActive = null;
-  function tick(){
+  function checkState(){
     const r  = header.getBoundingClientRect();
     const hh = Math.max(1, r.height);
     const topGone = Math.max(0, -r.top);
@@ -402,9 +403,10 @@ function ensureScrollArrow(threshold = 0.60){
       arrow.style.pointerEvents = isActive ? "none" : "auto";
       lastActive = isActive;
     }
-    requestAnimationFrame(tick);
   }
-  requestAnimationFrame(tick);
+
+  // Daha hafif: her 100ms’de bir kontrol et
+  setInterval(checkState, 100);
 }
 
 /* =============================
@@ -503,7 +505,7 @@ if (window.matchMedia("(max-width: 767px)").matches) {
   let startY = 0, currentY = 0, dragging = false, startedAtTop = false;
 
   const OPEN_Y = 0;
-  const MAX_BLUR_PX = 6; // overlay blur maksimumu
+  const MAX_BLUR_PX = 0; // overlay blur maksimumu
   const panelContentEl = document.getElementById("panelContent");
   const panelHeader  = document.querySelector("#panel header");
   const dragHandle   = document.querySelector(".drag-handle");
@@ -669,8 +671,7 @@ try {
   for (const d of albumsData) {
     // Önden cache (opsiyonel)
     const cover = d.cover;
-    const im = cacheImage(cover);
-    try { await im.decode?.(); } catch {}
+    cacheImage(cover); // sadece cache et, decode etme
 
     // Albüm kartı
     const el = document.createElement("div");
@@ -827,6 +828,12 @@ try {
     blurDisabled = false;
   }
 
+  // === YENİ: mobil cihazlarda blur'u direkt kapat ===
+  if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+    disableBlur();
+    return;
+  }
+
   function checkFPS(){
     const now = performance.now();
     frames++;
@@ -834,12 +841,6 @@ try {
       fps = frames;
       frames = 0;
       lastTime = now;
-
-      if (fps < 15 && !blurDisabled) {
-        disableBlur();
-      } else if (fps >= 25 && blurDisabled) {
-        enableBlur();
-      }
     }
     requestAnimationFrame(checkFPS);
   }
