@@ -233,7 +233,7 @@ function openPanelFromData(albumObj, cardEl){
   const onReady = () => {
     skeleton?.remove();
     coverImg.style.display = "block";
-    applyPanelBackground(coverImg, panelEl);
+
   };
   if ("decode" in coverImg) {
     coverImg.decode().then(onReady).catch(() => coverImg.onload = onReady);
