@@ -177,12 +177,12 @@ function openPanelFromData(albumObj, cardEl){
   const overlayEl = document.getElementById("panelOverlay");
   if (!albumObj || !panelEl || !panelContent || !panelTitle) return;
 
-  // başlık + yıl
+  // Başlık + yıl
   panelTitle.textContent = `${albumObj.artist} — ${albumObj.title}`;
   const yearNode = ensureHeaderYearNode();
   if (yearNode) yearNode.textContent = albumObj.year ? String(albumObj.year) : "";
 
-  // kapak & platform linkleri
+  // Kapak & platform linkleri
   const imgUrl = albumObj.cover || "";
   const q = encodeURIComponent(`${albumObj.artist} ${albumObj.title}`);
   const spotifyUrl = albumObj.spotify || `https://open.spotify.com/search/${q}`;
@@ -216,10 +216,13 @@ function openPanelFromData(albumObj, cardEl){
       <a href="${spotifyUrl}" target="_blank" class="play-button spotify" aria-label="Spotify"></a>
       <a href="${ytmusicUrl}" target="_blank" class="play-button yt" aria-label="YouTube Music"></a>
       <a href="${appleUrl}"   target="_blank" class="play-button apple" aria-label="Apple Music"></a>
+      <button class="play-button share" id="panelShare" title="Paylaş"></button>
     </div>
     ${albumObj.desc ? `<h4 style="margin-top:16px;">Açıklama</h4><p>${albumObj.desc}</p>` : ""}
     ${tracksHtml}
   `;
+
+  // Eski içerikleri temizle ve yeni içeriği yerleştir
   const siblings = [...panelContent.children].filter(el => el.id !== "panelCover" && !el.classList.contains("panel-skeleton"));
   siblings.forEach(el => el.remove());
   coverImg.insertAdjacentHTML("afterend", extraHtml);
@@ -243,6 +246,110 @@ function openPanelFromData(albumObj, cardEl){
   panelEl.classList.add("open");
   overlayEl?.classList.add("open");
   if (window.innerWidth <= 640) document.body.classList.add("no-scroll");
+
+  // === PAYLAŞ (PNG) — Tam panel + istenmeyen butonları çıkar, köşeleri keskin yap, numaraları güvenli yaz, alt yazı ekle ===
+
+const shareBtn = document.getElementById("panelShare");
+if (shareBtn) {
+  shareBtn.onclick = async () => {
+    const panel = document.getElementById("panel");
+    if (!panel || !albumObj) return;
+
+    const rect = panel.getBoundingClientRect();
+    const targetWidth = Math.round(rect.width);
+
+    const canvas = await html2canvas(panel, {
+      backgroundColor: "#0a0a0a",
+      scale: 2,
+      width: targetWidth,
+      windowWidth: Math.max(document.documentElement.clientWidth, targetWidth),
+
+      onclone: (doc) => {
+        // paneli aç ve düzelt
+        const p = doc.getElementById("panel");
+        if (p) {
+          p.classList.add("open");
+          p.style.transform = "none";
+          p.style.position = "static";
+          p.style.width  = targetWidth + "px";
+          p.style.height = "auto";
+          p.style.maxHeight = "none";
+          p.style.borderRadius = "0";
+          p.style.boxShadow = "none";
+        }
+        const pc = doc.getElementById("panelContent");
+        if (pc) {
+          pc.style.height = "auto";
+          pc.style.maxHeight = "none";
+          pc.style.overflow = "visible";
+        }
+
+        // paylaşımda çıkmasın dediklerin
+        doc.querySelectorAll(
+          "#panelClose, .drag-handle, .play-button.share, .play-button.spotify, .play-button.yt, .play-button.apple"
+        ).forEach(el => el.remove());
+
+        const ov = doc.getElementById("panelOverlay");
+        if (ov) ov.remove();
+
+        // numara fix
+        doc.querySelectorAll("#panelContent ol").forEach((ol) => {
+          ol.style.listStyle = "none";
+          ol.style.paddingLeft = "0";
+          const lis = ol.querySelectorAll("li");
+          lis.forEach((li, idx) => {
+            if (!li.querySelector(".share-num")) {
+              const num = doc.createElement("span");
+              num.className = "share-num";
+              num.textContent = (idx + 1) + ".";
+              Object.assign(num.style, {
+                display: "inline-block",
+                minWidth: "1.8em",
+                marginRight: "0.6em",
+                textAlign: "right",
+                fontWeight: "600"
+              });
+              li.insertBefore(num, li.firstChild);
+            }
+            li.style.display = "block";
+            li.style.lineHeight = "1.6em";
+            li.style.margin = "4px 0";
+          });
+        });
+      }
+    });
+
+    // PNG çıktısı
+    canvas.toBlob(async (blob) => {
+      if (!blob) return;
+      const file = new File([blob], "album.png", { type: "image/png" });
+
+      // mesaj metni
+      const shareText = `${albumObj.artist} — ${albumObj.title}${albumObj.year ? ` (${albumObj.year})` : ""}\n${location.origin}/#/${encodeURIComponent(albumObj.artist)}/${encodeURIComponent(albumObj.title)}`;
+
+      if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+        try {
+          await navigator.share({
+            files: [file],
+            title: `${albumObj.title}`,
+            text: shareText
+          });
+        } catch (err) {
+          console.warn("Paylaşım iptal:", err);
+        }
+      } else {
+        // masaüstünde sadece dosya indir
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "album.png";
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+    }, "image/png");
+  };
+}
+
 }
 
 /* =============================

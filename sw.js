@@ -11,10 +11,11 @@ const PRECACHE_URLS = [
   './style.css',
   './main.js',
   './albums.json',
-  './apple-music.png',
-  './spotify.png',
-  './yt-music.png',
-  './logo.png'
+  './icons/apple-music.png',
+  './icons/spotify.png',
+  './icons/yt-music.png',
+  './icons/logo-192.png',
+  './icons/logo-512.png'
 ];
 
 self.addEventListener('install', (event) => {

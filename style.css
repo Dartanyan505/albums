@@ -214,9 +214,9 @@ body.no-scroll{ overflow:hidden; }
 .play-buttons{ display:flex; gap:8px; margin-top:8px; flex-wrap:wrap; }
 .play-button{ width:36px; height:36px; border-radius:50%; display:inline-block; background-size:100%; background-repeat:no-repeat; background-position:center; transition:transform .2s ease, box-shadow .2s ease; }
 .play-button:hover{ transform:scale(1.1); box-shadow:0 3px 8px rgba(0,0,0,.3); }
-.play-button.spotify{ background-image:url('spotify.png'); }
-.play-button.yt{ background-image:url('yt-music.png'); }
-.play-button.apple{ background-image:url('apple-music.png'); }
+.play-button.spotify{ background-image:url('icons/spotify.png'); }
+.play-button.yt{ background-image:url('icons/yt-music.png'); }
+.play-button.apple{ background-image:url('icons/apple-music.png'); }
 
 /* =========================================================
    Custom Cursor (masaüstü)
@@ -286,4 +286,19 @@ body.no-scroll { overscroll-behavior: none; }
   transition: background .35s ease, box-shadow .35s ease, color .2s ease, transform .3s ease;
   background-size: 200% 200%;
   animation: panelShift 15s ease-in-out infinite alternate;
+}
+
+.panel-actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  position: absolute;
+  top: 10px;
+  right: 14px;
+}
+
+.play-button.share {
+  background-image: url('icons/share.png'); /* kendi ikonunu icons klasörüne koy */
+  background-position: center;
+  background-repeat: no-repeat;
 }
