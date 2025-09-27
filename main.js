@@ -249,47 +249,46 @@ function openPanelFromData(albumObj, cardEl){
 
   // === PAYLAŞ (PNG) — Tam panel + istenmeyen butonları çıkar, köşeleri keskin yap, numaraları güvenli yaz, alt yazı ekle ===
 
-const shareBtn = document.getElementById("panelShare");
-if (shareBtn) {
-  shareBtn.onclick = async () => {
-    if (!albumObj) return;
-
-    // slug -> lowercase + tire
-    const slugify = (s) => String(s)
-      .normalize('NFKD').replace(/[\u0300-\u036f]/g, '')
-      .toLowerCase().trim()
-      .replace(/&/g, '-and-')
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-+|-+$/g, '');
-
-    const artistSlug = slugify(albumObj.artist);
-    const albumSlug  = slugify(albumObj.title);
-
-    // 🔗 Preview veren statik sayfa linki (kart bununla çıkar)
-    const previewLink = `${location.origin}/albums/${artistSlug}-${albumSlug}.html`;
-
-    // Mesaj metni (sade format)
-    const shareText = `${albumObj.artist} – ${albumObj.title}${albumObj.year ? ` (${albumObj.year})` : ""}\n${previewLink}`;
-
-    if (navigator.share) {
-      try {
-        // Sadece text gönderiyoruz (link zaten metnin içinde)
-        await navigator.share({ title: albumObj.title, text: shareText });
-      } catch (err) {
-        console.warn("Paylaşım iptal:", err);
+  const shareBtn = document.getElementById("panelShare");
+  if (shareBtn) {
+    shareBtn.onclick = async () => {
+      if (!albumObj) return;
+    
+      const slugify = (s) => String(s)
+        .normalize('NFKD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .trim()
+        .replace(/&/g, '-and-')
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+    
+      const artistSlug = slugify(albumObj.artist);
+      const albumSlug  = slugify(albumObj.title);
+      const linkHref   = `${location.origin}/#/${artistSlug}/${albumSlug}`;
+    
+      const shareText = `${albumObj.artist} – ${albumObj.title}${albumObj.year ? ` (${albumObj.year})` : ""}\n\n${linkHref}`;
+    
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: albumObj.title,
+            text: shareText
+            // url: linkHref  👈 kaldırdık
+          });
+        } catch (err) {
+          console.warn("Paylaşım iptal:", err);
+        }
+      } else {
+        try {
+          await navigator.clipboard.writeText(shareText);
+          alert("📋 Metin panoya kopyalandı.");
+        } catch (err) {
+          console.error("Panoya kopyalanamadı:", err);
+        }
       }
-    } else {
-      // Masaüstü: panoya kopyala fallback
-      try {
-        await navigator.clipboard.writeText(shareText);
-        alert("📋 Metin panoya kopyalandı.");
-      } catch (err) {
-        console.error("Panoya kopyalanamadı:", err);
-      }
-    }
-  };
-}
-
+    };
+  }
 }
 
 /* =============================
