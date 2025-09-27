@@ -250,105 +250,35 @@ function openPanelFromData(albumObj, cardEl){
   // === PAYLAŞ (PNG) — Tam panel + istenmeyen butonları çıkar, köşeleri keskin yap, numaraları güvenli yaz, alt yazı ekle ===
 
   const shareBtn = document.getElementById("panelShare");
-  if (shareBtn) {
-    shareBtn.onclick = async () => {
-      const panel = document.getElementById("panel");
-      if (!panel || !albumObj) return;
+  
+if (shareBtn) {
+  shareBtn.onclick = async () => {
+    if (!albumObj) return;
 
-      const rect = panel.getBoundingClientRect();
-      const targetWidth = Math.round(rect.width);
+    const linkHref = `${location.origin}/#/${encodeURIComponent(albumObj.artist)}/${encodeURIComponent(albumObj.title)}`;
+    const shareText = `${albumObj.artist} – ${albumObj.title}${albumObj.year ? ` (${albumObj.year})` : ""}\n${linkHref}`;
 
-      const canvas = await html2canvas(panel, {
-        backgroundColor: "#0a0a0a",
-        scale: 2,
-        width: targetWidth,
-        windowWidth: Math.max(document.documentElement.clientWidth, targetWidth),
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: albumObj.title,
+          text: shareText,
+          url: linkHref   // 👈 bazı uygulamalar bu kısmı da dikkate alıyor
+        });
+      } catch (err) {
+        console.warn("Paylaşım iptal:", err);
+      }
+    } else {
+      try {
+        await navigator.clipboard.writeText(shareText);
+        alert("📋 Metin panoya kopyalandı.");
+      } catch (err) {
+        console.error("Panoya kopyalanamadı:", err);
+      }
+    }
+  };
+}
 
-        onclone: (doc) => {
-          // paneli aç ve düzelt
-          const p = doc.getElementById("panel");
-          if (p) {
-            p.classList.add("open");
-            p.style.transform = "none";
-            p.style.position = "static";
-            p.style.width  = targetWidth + "px";
-            p.style.height = "auto";
-            p.style.maxHeight = "none";
-            p.style.borderRadius = "0";
-            p.style.boxShadow = "none";
-          }
-          const pc = doc.getElementById("panelContent");
-          if (pc) {
-            pc.style.height = "auto";
-            pc.style.maxHeight = "none";
-            pc.style.overflow = "visible";
-          }
-
-          // paylaşımda çıkmasın dediklerin
-          doc.querySelectorAll(
-            "#panelClose, .drag-handle, .play-button.share, .play-button.spotify, .play-button.yt, .play-button.apple"
-          ).forEach(el => el.remove());
-
-          const ov = doc.getElementById("panelOverlay");
-          if (ov) ov.remove();
-
-          // numara fix
-          doc.querySelectorAll("#panelContent ol").forEach((ol) => {
-            ol.style.listStyle = "none";
-            ol.style.paddingLeft = "0";
-            const lis = ol.querySelectorAll("li");
-            lis.forEach((li, idx) => {
-              if (!li.querySelector(".share-num")) {
-                const num = doc.createElement("span");
-                num.className = "share-num";
-                num.textContent = (idx + 1) + ".";
-                Object.assign(num.style, {
-                  display: "inline-block",
-                  minWidth: "1.8em",
-                  marginRight: "0.6em",
-                  textAlign: "right",
-                  fontWeight: "600"
-                });
-                li.insertBefore(num, li.firstChild);
-              }
-              li.style.display = "block";
-              li.style.lineHeight = "1.6em";
-              li.style.margin = "4px 0";
-            });
-          });
-        }
-      });
-
-      // PNG çıktısı
-      canvas.toBlob(async (blob) => {
-        if (!blob) return;
-        const file = new File([blob], "album.png", { type: "image/png" });
-
-        // mesaj metni
-        const shareText = `${albumObj.artist} — ${albumObj.title}${albumObj.year ? ` (${albumObj.year})` : ""}\n${location.origin}/#/${encodeURIComponent(albumObj.artist)}/${encodeURIComponent(albumObj.title)}`;
-
-        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-          try {
-            await navigator.share({
-              files: [file],
-              title: `${albumObj.title}`,
-              text: shareText
-            });
-          } catch (err) {
-            console.warn("Paylaşım iptal:", err);
-          }
-        } else {
-          // masaüstünde sadece dosya indir
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement("a");
-          a.href = url;
-          a.download = "album.png";
-          a.click();
-          URL.revokeObjectURL(url);
-        }
-      }, "image/png");
-    };
-  }
 }
 
 /* =============================
