@@ -661,4 +661,52 @@ if (window.matchMedia("(max-width: 767px)").matches) {
   enableKeyboardNavigation();
 }
 
+// === Panel Blur Dinamik FPS Tabanlı Optimizasyon (Aç/Kapat) ===
+(function(){
+  const panel = document.querySelector('.panel');
+  const overlay = document.getElementById('panelOverlay');
+  if (!panel || !overlay) return;
+
+  let frames = 0;
+  let lastTime = performance.now();
+  let fps = 60;
+  let blurDisabled = false;
+
+  function disableBlur(){
+    panel.style.backdropFilter = 'none';
+    panel.style.webkitBackdropFilter = 'none';
+    overlay.style.backdropFilter = 'none';
+    overlay.style.webkitBackdropFilter = 'none';
+    overlay.style.background = 'rgba(0,0,0,0.65)';
+    blurDisabled = true;
+  }
+
+  function enableBlur(){
+    panel.style.backdropFilter = 'blur(12px)';
+    panel.style.webkitBackdropFilter = 'blur(12px)';
+    overlay.style.backdropFilter = 'blur(6px)';
+    overlay.style.webkitBackdropFilter = 'blur(6px)';
+    overlay.style.background = 'rgba(0,0,0,0.4)';
+    blurDisabled = false;
+  }
+
+  function checkFPS(){
+    const now = performance.now();
+    frames++;
+    if (now - lastTime >= 1000) {
+      fps = frames;
+      frames = 0;
+      lastTime = now;
+
+      if (fps < 15 && !blurDisabled) {
+        disableBlur();
+      } else if (fps >= 15 && blurDisabled) {
+        enableBlur();
+      }
+    }
+    requestAnimationFrame(checkFPS);
+  }
+  requestAnimationFrame(checkFPS);
+})();
+
 window.addEventListener('DOMContentLoaded', init);
